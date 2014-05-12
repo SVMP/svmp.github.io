@@ -6,7 +6,7 @@ title: Contributing
 TODO
 
 * howto give feedback
-** reporting bugs
+** making useful bug reports (add CONTRIBUTING.md files to the various project repos to get that github feature)
 ** suggesting features
 ** where to post them before we get JIRA or equivalent up somewhere
 * explain the different repositories: github vs gerrit

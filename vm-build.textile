@@ -2,3 +2,38 @@
 layout: default
 title: Build the Android VM
 ---
+
+h2. Setting up a Build Environment
+
+For the VM image itself, the build process is largely the same as for upstream AOSP, and much of the AOSP documentation on the subject applies. We highly recommend reading the following pages before continuing:
+* Prerequisites for the build environment are described "here":http://source.android.com/source/initializing.html.
+* Details of the build commands "here":http://source.android.com/source/building.html.
+
+The AOSP documentation references the upstream master, which is currently Android 4.4.x KitKat. There are some differences when it comes to the SVMP code. For instance, OpenJDK does *not* work reliably with Android 4.2.2 or 4.0.0 as found in current SVMP versions, and *"Oracle JDK 6":http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html#jdk-6u45-oth-JPR must be used instead*.
+
+If you don't have access to a machine natively running the correct version, it is possible to create a working build environment inside a "chroot":http://slightlymorethanworthless.blogspot.com/2011/08/easy-chroot-build-environment-for.html, LXC or docker container, or VM. Many great guides for these are available on the web so we leave this as an exercise for the reader. Please consider contributing to the "wiki":https://github.com/SVMP/svmp.github.io/wiki#howto-guides if you find any particularly good approaches worth sharing.
+
+h3. SVMP 1.1 and newer
+
+The SVMP v1.1-1.5 series is based off of Android 4.2.2 and should compile correctly on Ubuntu 10.04, 12.04, and 14.04 as-is, although we recommend using 12.04. The upstream build environment instructions and required packages list for Ubuntu 12.04 are sufficient for these versions of SVMP.
+
+h3. SVMP 1.0 and older
+
+The SVMP 1.0 and earlier code is based off of Android 4.0.4. For this version, you will need a machine with Ubuntu 10.04 64-bit, and install the Ubuntu 10.04 required packages as listed in the upstream docs.
+
+h3. Building on MacOS
+
+In the author's experience, this has never successfully worked. The "upstream documentation":http://source.android.com/source/initializing.html#setting-up-a-mac-os-x-build-environment for this has substantially improved recently, but it still requires juggling out-dated versions of both the OS and Xcode. We recommend using a Linux VM instead.
+
+h2. Starting the Build
+
+Summary:
+
+1.  cd ${SVMP_AOSP_ROOT}
+2.  ./build-svmp.sh
+3.  Answer the questions as prompted according to your preference. If using a KVM-based virtualization platform with virtio support, answer Yes to the virtio support question, otherwise No.
+4.  Go get lunch.
+
+A complete build of Android from a clean tree can take a substantial amount of time depending on your hardware. Upwards of an hour for a full build is not uncommon.
+
+_Note: All of the questions the build process asks can be overridden using environment variables. Look in device/mitre/svmp/build-svmp2.sh to see what variables can be set._

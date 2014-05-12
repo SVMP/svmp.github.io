@@ -2,3 +2,7 @@
 layout: default
 title: Build SVMP Android App
 ---
+
+Follow the instructions in the client "README":https://github.com/SVMP/svmp-android-client/blob/svmp-1.1/README.md
+
+Install the resulting APK to an Android 4.0 or newer device and add a new connection for your an SVMP server.

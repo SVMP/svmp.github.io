@@ -52,7 +52,7 @@ Virtual Device VM
 * VirtualBox
 * VMware ESX, Workstation, Fusion, & Player
 
-Public & Private APIs
+Public & Private Clouds
 
 * OpenStack Havana (Essex or newer should work, but not tested recently)
 

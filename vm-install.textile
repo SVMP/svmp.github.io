@@ -2,3 +2,50 @@
 layout: default
 title: Installing and Running the VM
 ---
+
+
+
+h1. Running SVMP
+
+h2. Starting a VM Instance
+
+h3. Virtual Box
+
+# Build the project as above
+# From ${SVMP_AOSP_ROOT}/out/target/product/svmp/ copy the files:
+    * android_system_disk.vdi
+    * android_data_disk.vdi
+# Create a VM in VBox using the android_system_disk.vdi as the first hard drive using an IDE controller (not SATA or SCSI)
+# Attach android_data_disk.vdi as a 2nd IDE drive
+# Add a network interface such that the VM can communicate with the SVMP proxy server
+# Start it up
+
+Note for laptop users: VirtualBox will pass ACPI data from the host into the VM by default. If you start the VM while running on battery, VBox will incorrectly pass a "sleep" command to the VM causing it to immediately shutdown right after it's finished booting. To correct, either plug in to the wall or configure VBox to not do ACPI pass-through.
+
+Note 2: You can add a serial port device to the VM to get access to dmesg and init console log. If you attach an interactive pty to that serial port, you can also get a local shell.
+
+h3. VMware
+
+Same as for Virtual Box, but use android_system_disk.vmdk and android_data_disk.vmdk instead.
+
+h3. KVM
+
+To use virtio para-virtualized disks, make sure to answer Yes in that part of the build-svmp script.
+
+Configure a VM using android_system_disk.img and android_data_disk.img, or first convert them to another format like QCOW using qemu-img.
+
+h3. OpenStack (with KVM compute nodes)
+
+Convert android_system_disk.img to QCOW2 format using qemu-img. Upload the resulting image to glance.
+
+Create a cinder volume of the size you want for users' persistent data, apps, and settings. Mount to an existing Linux VM. Partition the blank volume into two primary partitions. The first will be the main data storage partition (Android's /data mountpoint). Size appropriately. The second will be the cache partition (Android's /cache), and need be no larger than 1GB.
+
+After formatting, create loopback devices for the two partitions using 'kpartx -a'. Then format each partition as ext4.
+
+Unmount the loopbacks with 'kpartx -d' and remove the cinder volume from the Linux VM.
+
+As an example, prebuilt images of a variety of sizes can be found in 'device/mitre/svmp/data-disk-blanks'.
+
+This volume will now be the basis for all new user data volumes. To create a new clone of the volume, snapshot it and spawn a new volume from the snapshot.
+
+Create SVMP instances by launching the glance image and attaching a user data volume.
