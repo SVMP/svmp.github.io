@@ -1,0 +1,76 @@
+---
+layout: default
+title: Secure Virtual Mobile Platform
+---
+
+The Secure Virtual Mobile Platform provides a _virtual smartphone_ tailored for running in the cloud. It helps solve many of the problems of secure containers and "bring your own device" by treating a user's physical phone as a terminal for remotely accessing a virtual phone running safely in a datacenter. The virtual device can then be hardened to become a secure bastion for accessing enterprise apps and data.
+
+The core of the platform is an OS image based on the "Android Open Source Project":https://source.android.com/ that we have optimized for running on top of virtualization and cloud platforms such as KVM and OpenStack. Also included are front-end client applications for Android and iOS that can log into the remote desktop of the virtual device. Thanks to WebRTC technology, we are even able to make this work seamlessly over 3G and 4G cellular links.
+
+h2(#uses). What's it Good For?
+
+There are many possible use cases for SVMP. We built and released it here so it can become the foundation for whole new class of mobile capabilities. We would love to hear what novel ideas the community invents with these building blocks. Here are some we have thought of:
+
+* Keep sensitive data off of easily lost and stolen phones
+* Segregate different classes of data and workloads into isolated virtual environments (either business apps on a personal phone or personal apps on a business phone)
+* Offload expensive security monitoring and analysis from resource constrained smartphones
+* Provide better visibility into network and data usage
+* Streaming backup & rapid reconstitution
+* Application testing and portability
+
+h2(#features). Features
+
+* A virtual smartphone VM based on AOSP
+* Client applications for Android and iOS
+* Rich input forwarding
+** Full multi-touch
+** Screen rotation
+** Sensor forwarding
+** GPS location
+* Integration of remote apps
+** Cross-network intent broadcasting
+** Notification push
+** Transparent "single-app" mode (coming soon)
+
+h2(#supported). Platform Requirements
+
+SVMP is tested to run on the following platforms. Let us know if you get it working reliably on others.
+
+Client
+
+* Android 4.0+
+* iOS 7.1
+
+Server
+
+* Node.js 0.10.2+
+* MongoDB 2.2+
+
+Virtual Device VM
+
+* Linux KVM
+* VirtualBox
+* VMware ESX, Workstation, Fusion, & Player
+
+Public & Private APIs
+
+* OpenStack Havana (Essex or newer should work, but not tested recently)
+
+h2(#news). What's New
+
+Highlights from SVMP 1.4.0 (May 15, 2014)
+
+* Substantial rewrite of the Android client to move logged in server connections into a persistent background service.
+* Refactored svmp-server for better modularity
+* Upgraded WebRTC version to upstream v3.52 improving video performance and stability
+* VM reports nicer values for network and power status
+* Various bug fixes all around
+* This web site
+
+h2(#credits). Credits & Notices
+
+SVMP is released under the Apache License, Version 2.0.
+
+Originally developed under the "MITRE IR&D program":http://www.mitre.org/research/overview. Code and site content approved for public release, distribution unlimited under cases 13-1256 & 13-4271.
+
+Site built with "Jekyll":http://jekyllrb.com/ using the "Apache Buildr site":https://github.com/apache/buildr/tree/master/doc template and theme.

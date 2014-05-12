@@ -1,0 +1,9 @@
+---
+layout: default
+title: Mailing Lists
+---
+
+|_. users       |_. For discussion, help running, and development of SVMP |
+| Post          | "project-svmp-list@lists.mitre.org":mailto:project-svmp-list@lists.mitre.org |
+| Subscribe     | "Send 'subscribe project-svmp-list' to listserv@lists.mitre.org":mailto:listserv@lists.mitre.org?body=subscribe%20project-svmp-list |
+| Unsubscribe   | "Send 'signoff project-svmp-list' to listserv@lists.mitre.org":mailto:listserv@lists.mitre.org?body=signoff%20project-svmp-list |

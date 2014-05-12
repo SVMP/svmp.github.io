@@ -1,0 +1,21 @@
+---
+layout: default
+title: Contributing
+---
+
+TODO
+
+* howto give feedback
+** reporting bugs
+** suggesting features
+** where to post them before we get JIRA or equivalent up somewhere
+* explain the different repositories: github vs gerrit
+* gerrit, repo
+* where to post patches until we get public gerrit stood up
+* contributor agreement (linux kernel style)
+* license/copyright notice requirements (must be ASL2 compatible and add your copyright)
+* how to write a good patch
+** >= 60 char first line
+** explanatory body at >= 80 char
+** Change-id line
+** signed-off-by line

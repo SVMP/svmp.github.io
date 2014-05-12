@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <meta content='text/html;charset=UTF-8' http-equiv='Content-Type'>
+    <title>SVMP &mdash; {{ page.title }}</title>
+    <style type='text/css'>
+      @import 'css/default.css';
+      @import 'css/syntax.css';
+    </style>
+    <style media='print' type='text/css'>
+      @import 'css/print.css';
+    </style>
+  </head>
+  <body>
+    <div id='wrap'>
+      <div id='header'>
+      </div>
+      <div id='pages'>
+        <ol class='toc'>
+          <li>Start Here
+            <ol class="toc">
+              <li><a href='index.html'>Welcome</a></li>
+              <li><a href='quick_start.html'>Quick Start</a></li>
+              <li><a href='architecture.html'>Architecture</a></li>
+              <li><a href='https://github.com/SVMP/svmp.github.io/wiki'>Community Wiki</a></li>
+<!--              <li><a>Demo [coming soon]</a></li> -->
+            </ol>
+          </li>
+          <li>Get Involved
+            <ol class="toc">
+              <li><a href='downloading.html'>Get the Code</a></li>
+              <li><a href='mailing_lists.html'>Mailing Lists</a></li>
+              <li><a href='contributing.html'>Contributing</a></li>
+<!--              <li><a>Issues/Bugs [coming soon]</a></li> -->
+<!--              <li><a>Gerrit Review [coming Soon]</a></li> -->
+            </ol>
+          </li>
+          <li>Client &mdash; Android
+            <ol class="toc">
+              <li><a href='client-android-build.html'>Build</a></li>
+              <li><a href='client-android-install.html'>Install</a></li>
+            </ol>
+          </li>
+          <li>Client &mdash; iOS
+            <ol class="toc">
+              <li><a href='client-ios-build.html'>Build</a></li>
+              <li><a href='client-ios-install.html'>Install</a></li>
+            </ol>
+          </li>
+          <li>Server
+            <ol class="toc">
+              <li><a href='server-build.html'>Build</a></li>
+              <li><a href='server-install.html'>Install</a></li>
+              <li><a href='server-config.html'>Configure</a></li>
+            </ol>
+          </li>
+          <li>Virtual Device
+            <ol class="toc">
+              <li><a href='vm-build.html'>Build</a></li>
+              <li><a href='vm-install.html'>Install</a></li>
+            </ol>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <h1>{{ page.title }}</h1>
+        {{ content }}
+      </div>
+      <div id='footer'>The contents of this website are copyright &copy; 2012-2014 <a href="http://www.mitre.org/">The MITRE Corporation</a>.</div>
+    </div>
+  </body>
+</html>
