@@ -4,48 +4,90 @@ title: Installing and Running the VM
 ---
 
 
+h2. VirtualBox
 
-h1. Running SVMP
-
-h2. Starting a VM Instance
-
-h3. Virtual Box
-
-# Build the project as above
 # From ${SVMP_AOSP_ROOT}/out/target/product/svmp/ copy the files:
     * android_system_disk.vdi
     * android_data_disk.vdi
-# Create a VM in VBox using the android_system_disk.vdi as the first hard drive using an IDE controller (not SATA or SCSI)
-# Attach android_data_disk.vdi as a 2nd IDE drive
+# Create a VM in VBox using the android_system_disk.vdi as the first hard drive
+# Attach android_data_disk.vdi as a 2nd hard drive
 # Add a network interface such that the VM can communicate with the SVMP proxy server
 # Start it up
 
 Note for laptop users: VirtualBox will pass ACPI data from the host into the VM by default. If you start the VM while running on battery, VBox will incorrectly pass a "sleep" command to the VM causing it to immediately shutdown right after it's finished booting. To correct, either plug in to the wall or configure VBox to not do ACPI pass-through.
 
-Note 2: You can add a serial port device to the VM to get access to dmesg and init console log. If you attach an interactive pty to that serial port, you can also get a local shell.
+Note 2: You can add a serial port device to the VM to get access to dmesg and init console log. If you attach an interactive pty to that serial port, you can also get a local root shell.
 
-h3. VMware
+h2. VMware
 
 Same as for Virtual Box, but use android_system_disk.vmdk and android_data_disk.vmdk instead.
 
-h3. KVM
+h2. KVM
 
-To use virtio para-virtualized disks, make sure to answer Yes in that part of the build-svmp script.
+Convert android_system_disk.img and android_data_disk.img to QCOW2 format using qemu-img.
 
-Configure a VM using android_system_disk.img and android_data_disk.img, or first convert them to another format like QCOW using qemu-img.
+<pre>
+    $ qemu-img -o compat=0.10 -f raw -O qcow2 android_system_disk.img \
+      android_system_disk.qcow2
+    $ qemu-img -o compat=0.10 -f raw -O qcow2 android_data_disk.img \
+      android_data_disk.qcow2
+</pre>
 
-h3. OpenStack (with KVM compute nodes)
+If using virtio para-virtualized disks, make sure to have answered Yes in that part of the build-svmp script.
 
-Convert android_system_disk.img to QCOW2 format using qemu-img. Upload the resulting image to glance.
+h2. OpenStack (with KVM compute nodes)
 
-Create a cinder volume of the size you want for users' persistent data, apps, and settings. Mount to an existing Linux VM. Partition the blank volume into two primary partitions. The first will be the main data storage partition (Android's /data mountpoint). Size appropriately. The second will be the cache partition (Android's /cache), and need be no larger than 1GB.
+# Convert the system and data disk .img files as in above for stand-alone KVM.
+# Upload the resulting images to glance.
+# Create a cinder volume based on the android_data_disk glance image. This will become the master copy that every new user's persistent data disk is cloned or snapshotted from.
+# Launch a new VM instance from the system disk image. Use a flavor that has at least 1GB for the root disk and 1GB of RAM. Ephemeral disk is unused and can be left as zero.
+# Configure the security groups for the VM so that at least inbound TCP port 8001 is allowed. Optionally, allow inboud TCP 5555 for ADB and/or TCP 22 for SSH if you built the VM image with an embedded SSH keypair.
+# Create a cinder volume for the user account using the "gold" snapshot from step 3 as the base. Attach this new volume to the now running VM.
+# Hard Reboot the VM instance so it can find the now attached data volume.
 
-After formatting, create loopback devices for the two partitions using 'kpartx -a'. Then format each partition as ext4.
+h2. Data Disks
 
-Unmount the loopbacks with 'kpartx -d' and remove the cinder volume from the Linux VM.
+The default data disk created by the build system and output as android_data_disk.img is a 5GB disk with 4GB assigned to /data and 1GB to /cache.
 
-As an example, prebuilt images of a variety of sizes can be found in 'device/mitre/svmp/data-disk-blanks'.
+Several alternate images in a variety of sizes can be found in 'device/mitre/svmp/data-disk-blanks' named by the size of the /data partition. All contain a 1GB cache partition.
 
-This volume will now be the basis for all new user data volumes. To create a new clone of the volume, snapshot it and spawn a new volume from the snapshot.
+h3. Creating a new data disk image from scratch
 
-Create SVMP instances by launching the glance image and attaching a user data volume.
+If the prebuilt images don't fulfill your needs you can create a custom blank data disk with the following steps.
+
+# Create a sparse file of the desired size
+  <pre>
+    $ dd if=/dev/zero of=android_data_disk.img bs=1 count=0 seek=<SIZE>
+  </pre>
+# Create partitions within the image for /cache and /data. The /cache partition should be approximately 1GB and /data is configurable, but should be at least 1GB itself.
+  <pre>
+    $ fdisk android_data_disk.img
+    Command: n
+    Select: p
+    Partition number: 1
+    First sector: <enter for default>
+    Last sector ... or +size{K,M,G}: +<SIZE of /data>
+    Command: n
+    Select: p
+    Partition number: 2
+    First sector: <enter for default>
+    Last sector: <enter for default>
+    Command: w
+  </pre>
+# Scan the image and add the new partitions to /dev. Note the loopXpY names the first command for the next step.
+  <pre>
+    $ sudo kpartx -l android_data_disk.img
+    $ sudo kpartx -a android_data_disk.img
+  </pre>
+# The two partitions should have appeared in /dev/mapper called something like loop0p1 and loop0p2 and should have been printed out by the <code>kpartx -l</code> command.
+# Format the two partitions. Replace the device names in the example with the real names from step 3.
+  <pre>
+    $ sudo mkfs.ext4 /dev/mapper/loopXp1
+    $ sudo mkfs.ext4 /dev/mapper/loopXp2
+  </pre>
+# Unmount the loopback devices
+  <pre>
+    $ sudo kpartx -d android_data_disk.img
+  </pre>
+
+For future consideration, all this could probably be scripted up nicely with libguestfs.
