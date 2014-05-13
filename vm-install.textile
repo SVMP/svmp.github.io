@@ -4,7 +4,7 @@ title: Installing and Running the VM
 ---
 
 
-h2. VirtualBox
+h2(#vbox). VirtualBox
 
 # From ${SVMP_AOSP_ROOT}/out/target/product/svmp/ copy the files:
     * android_system_disk.vdi
@@ -18,11 +18,11 @@ Note for laptop users: VirtualBox will pass ACPI data from the host into the VM 
 
 Note 2: You can add a serial port device to the VM to get access to dmesg and init console log. If you attach an interactive pty to that serial port, you can also get a local root shell.
 
-h2. VMware
+h2(#vmware). VMware
 
 Same as for Virtual Box, but use android_system_disk.vmdk and android_data_disk.vmdk instead.
 
-h2. KVM
+h2(#kvm). KVM
 
 Convert android_system_disk.img and android_data_disk.img to QCOW2 format using qemu-img.
 
@@ -35,17 +35,35 @@ Convert android_system_disk.img and android_data_disk.img to QCOW2 format using 
 
 If using virtio para-virtualized disks, make sure to have answered Yes in that part of the build-svmp script.
 
-h2. OpenStack (with KVM compute nodes)
+h2(#openstack). OpenStack (with KVM compute nodes)
 
 # Convert the system and data disk .img files as in above for stand-alone KVM.
 # Upload the resulting images to glance.
 # Create a cinder volume based on the android_data_disk glance image. This will become the master copy that every new user's persistent data disk is cloned or snapshotted from.
-# Launch a new VM instance from the system disk image. Use a flavor that has at least 1GB for the root disk and 1GB of RAM. Ephemeral disk is unused and can be left as zero.
-# Configure the security groups for the VM so that at least inbound TCP port 8001 is allowed. Optionally, allow inboud TCP 5555 for ADB and/or TCP 22 for SSH if you built the VM image with an embedded SSH keypair.
-# Create a cinder volume for the user account using the "gold" snapshot from step 3 as the base. Attach this new volume to the now running VM.
+# Launch a new VM instance from the system disk image. Use a flavor that has at least 1GB for the root disk and 1GB of RAM. Ephemeral disk can be left as zero.
+# Configure the security groups as needed. See below.
+# [Optional] Connect a VM to the "gold image" volume made in step 3 and install any applications and configure any settings you’d like all users to have (keep in mind the entire environment will be cloned). Detach the VM when you’re done.
+# Create a cinder volume for each user account using the "gold" snapshot from step 3 as the base. Attach this new volume to the now running VM.
 # Hard Reboot the VM instance so it can find the now attached data volume.
 
-h2. Data Disks
+h3. Security Groups
+
+Openstack security groups can be used to effectively create host-based firewalls for the SVMP instances. If you use this feature, these are the ports that must be allowed access.
+
+SVMP Server
+* Inbound TCP 8001 from the server
+
+WebRTC
+* Outbound TCP and UDP 3478 to your STUN/TURN server
+* If using STUN, Inbound and Outbound UDP on all ports if using STUN for NAT traversal
+* If using TURN relay, Inbound and Outbound UDP on ports 49125-65535 to/from the TURN server (or match the range configured in the TURN server if not the default)
+
+Debugging (ADB and SSH shells)
+* Inbound TCP 5555
+* Inbound TCP 22 (only accessible if you built the VM image with an embedded SSH keypair)
+
+
+h2(#datadisk). Data Disks
 
 The default data disk created by the build system and output as android_data_disk.img is a 5GB disk with 4GB assigned to /data and 1GB to /cache.
 
