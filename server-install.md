@@ -5,20 +5,20 @@ title: Installing and Running the SVMP Server
 
 ## Prerequisites
 
-* Install [Node.js](http://nodejs.org) 0.10.24 or newer with npm
+The SVMP Server can be installed on most Linux distributions. It has been tested on Ubuntu 10.04+, CentOS 6, and RHEL 6. For development, it can also be installed and run OS X and Windows. See the [README](https://github.com/SVMP/svmp-server/blob/master/README.md) for more options.
+
+* Install [Node.js](http://nodejs.org) 0.10.24 or newer as well as the npm tool. See [here](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) to install from packages.
 * Install [MongoDB](http://docs.mongodb.org/manual/installation/) 2.2 or newer
 
-### Windows only
+* *Optional.* Install libpam development packages if you want to enable PAM-based user authentication with the server.
 
-* Install [Git for Windows](http://msysgit.github.io/)
-* Install [Python 2.7.6](https://www.python.org/download/releases/2.7.6/)
+    On Debian and Ubuntu.
+    
+        # apt-get install libpam-dev
 
-Additionally, on Windows, do the following *in order:*
+    On RHEL and CentOS. Requires EPEL.
 
-* Install [Visual Studio 2010](http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express)
-* Install [Windows SDK 7.1](http://www.microsoft.com/en-us/download/details.aspx?id=8279)
-* Install [Visual Studio 2010 SP1](http://www.microsoft.com/en-us/download/details.aspx?id=23691)
-* Install [Visual C++ 2010 SP1 Compiler Update for the Windows SDK 7.1](http://www.microsoft.com/en-us/download/details.aspx?id=4422)
+        # yum install pam-devel
 
 ## Installation
 
@@ -48,8 +48,14 @@ Starting up the server daemon itself:
 
     $ node bin/server.js
 
+A sysv init script template can be found [here](https://github.com/SVMP/puppet-svmp-server/blob/master/templates/svmp-init.erb). Edit the template to set the `APPLICATION_DIRECTORY` and `LOGFILE` to your liking, then copy it to `/etc/init.d/svmp-server`.
+
+The script depends on the `forever` tool that can be installed by running 
+
+    # npm install -g forever
+
 ## Puppet
 
 A puppet module is available for automated install and configuration of the SVMP server on RHEL and CentOS systems. This module can be found in the [puppet-svmp-server](https://github.com/SVMP/puppet-svmp-server) project.
 
-In addition to installing and configuring the server. This module can also install an init script for automatically launching the server at boot. It  also has options for managing the install of Node.js and MongoDB as well.
+In addition to installing and configuring the server, the module can also manage the init script, Node.js, and MongoDB as well.
