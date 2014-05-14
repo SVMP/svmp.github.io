@@ -3,19 +3,96 @@ layout: default
 title: Contributing
 ---
 
-TODO
+h2(#feedback). Providing Feedback
 
-* howto give feedback
-** making useful bug reports (add CONTRIBUTING.md files to the various project repos to get that github feature)
-** suggesting features
-** where to post them before we get JIRA or equivalent up somewhere
-* explain the different repositories: github vs gerrit
-* gerrit, repo
-* where to post patches until we get public gerrit stood up
-* contributor agreement (linux kernel style)
-* license/copyright notice requirements (must be ASL2 compatible and add your copyright)
-* how to write a good patch
-** >= 60 char first line
-** explanatory body at >= 80 char
-** Change-id line
-** signed-off-by line
+We don't have a central internet facing issue tracker at this time. Until such time that we do, please use the mailing list and Github bug trackers.
+
+h3. Bug Reports
+
+Send a note to the "developer mailing list":dev-list and create a new issue in the most appropriate Github project tracker.
+
+Be as specific as you can about the failure, the conditions under which it occured, how to reproduce it, and any error logs you can obtain from the time the failure occured. The more information you provide, the more likely we can quickly fix the problem.
+
+* Problems with the virtual machine: "SVMP VM daemon":https://github.com/SVMP/android_external_svmp_eventserver/issues
+* Client Applications:
+** "Android":https://github.com/SVMP/svmp-android-client/issues
+** "iOS":https://github.com/SVMP/svmp-iOS-client/issues
+* "SVMP Server":https://github.com/SVMP/svmp-server/issues
+
+h3. Feature Suggestions
+
+Send suggestions for improvements or new features to the "developer mailing list":dev-list.
+
+h2(#submitting). Submitting Patches
+
+Eventually all submissions will be handled through a "Gerrit code review server:https://svmp-review.mitre.org. Until that server is activated, please submit pull requests through Github or send patches to the "mailing list":dev-list.
+
+h3. Commit formatting
+
+First, make sure to configure git with your real name and email address.
+
+Please try to stick to the following format for patches as much as possible:
+
+* First line containing a short, but clear description of the main purpose of the patch. ~60 characters max.
+* Blank second line
+* Body containing a long form description of everything done in the patch. For merge commits, include the list of commits with their tag lines that are pulled in by the merge. Wrap your text and keep lines under 80 characters.
+* Signed-off-by line
+* Change-id line if pushing to Gerrit
+
+"More information on writing good commit messages.":https://source.android.com/source/submit-patches.html#make-your-change
+
+h3. Merge commits
+
+Don't do them. We prefer a straight-line commit history for the SVMP repositories wherever possible as this is the preference of the Gerrit code review tool that manages all the git repositories. Please rebase your patches into a straight-line, fast-forwardable patch series before pushing.
+
+If you find yourself needing to do a merge commit and have a really good reason for doing so, send a message to the "developer mailing list":dev-list explaining what you are trying to do and ask for assistance on how to proceed.
+
+h3. Gerrit, repo, and the Change-id line
+
+All code contributions go through a Gerrit code review server before being merged to the mainline release. To track different versions of a proposed patch, Gerrit uses a "Change-id" line in the commit message.
+
+When working with the AOSP-based virtual machine code, the `repo` tool will handle this automatically. Most of the upstream AOSP documentation for working with repo and how to submit patches applies equally to SVMP
+* "Using Repo":https://source.android.com/source/developing.html
+* "Submitting Patches":https://source.android.com/source/submit-patches.html
+
+For the other SVMP components (clients, server, etc.), you will need to add these lines yourself. Consult the "Gerrit documentation for more information":https://gerrit-review.googlesource.com/Documentation/user-changeid.html, including how to create a local git commit hook to automatically add the Change-id lines for you.
+
+You may also find the `git-review` tool useful when working with repositories managed by Gerrit. It too will automatically handle
+* "git-review on PyPi":https://pypi.python.org/pypi/git-review/1.23
+* "MediWiki's Gerrit workflow instructions":http://www.mediawiki.org/wiki/Gerrit/git-review
+* "OpenStack's Gerrit workflow instructions":https://wiki.openstack.org/wiki/Gerrit_Workflow
+
+h3. License and Copyright
+
+SVMP is distributed primarily under the "Apache License, Version 2.0":https://www.apache.org/licenses/LICENSE-2.0.html.
+
+We do not ask for a copyright assignment for code contributions. We do however ask that you provide patches in a way that is "compatible with inclusion":https://www.apache.org/legal/resolved.html#category-a into an Apache licensed project. When modifying existing files, you may choose to add a brief note to the header comments with your name, the date, and what you modified to make changes easier to track. If adding new files, place an appropriate copyright and license notice in the file header. "Files without an explicit open source license":https://help.github.com/articles/open-source-licensing#what-happens-if-i-dont-choose-a-license have to be considered "All Rights Reserved" and cannot be included.
+
+h3. Signed-off-by
+
+_Patches without a Signed-off-by line cannot be considered for inclusion, and will in fact be rejected by the Gerrit code review system._
+
+To assure the chain of trust, for received patches the SVMP project uses the signed-off-by process as used by the Linux kernel.
+
+This means that each submitted patch must include a "Signed-off-by" line in the commit message with your real name and email address (no pseudonyms or anonymous contributions). Including this line indicates you certify that you have the right to contribute the patch under the license specified in the contributed code and adhere to the following:
+
+<pre>
+"Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I have the right to submit it under the open source license indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best of my knowledge, is covered under an appropriate open source license and I have the right under that license to submit that work with modifications, whether created in whole or in part by me, under the same open source license (unless I am permitted to submit under a different license), as indicated in the file; or
+
+(c) The contribution was provided directly to me by some other person who certified (a), (b) or (c) and I have not modified it.
+
+d) I understand and agree that this project and the contribution are public and that a record of the contribution (including all personal information I submit with it, including my sign-off) is maintained indefinitely and may be redistributed consistent with this project or the open source license(s) involved."
+</pre>
+
+Some external references on this process as it is used in other projects:
+* "Linux Kernel SubmittingPatches doc, 'Sign your work' Section":https://www.kernel.org/doc/Documentation/SubmittingPatches
+* http://ltsi.linuxfoundation.org/developers/signed-process
+* https://gerrit-review.googlesource.com/Documentation/user-signedoffby.html
+
+[dev-list]mailto:project-svmp-list@lists.mitre.org
