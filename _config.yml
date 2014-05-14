@@ -1,2 +1,3 @@
+exclude: [ Gemfile, Gemfile.lock ]
 pygments: true
 markdown: kramdown
