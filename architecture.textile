@@ -2,3 +2,11 @@
 layout: default
 title: System Architecture
 ---
+
+h2(#app). Application Architecture
+
+<img style="width:42em;" src="images/cloud-app-arch.png" />
+
+h2(#vm). Virtual Device
+
+<img style="width:42em;" src="images/vm-arch.png" />
