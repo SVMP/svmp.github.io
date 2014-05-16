@@ -1,0 +1,52 @@
+---
+layout: default
+title: Modifying the Protocol
+---
+
+Because the protocol is specified and generated using the Protocol Buffers format, it is easy to modify and extend. New message types can be easily introduced by adding new optional fields without breaking compatibility with unmodified versions of the client, server, or VM. Optional fields not recognized by a component running an older protocol version will be simply ignored as if they never existed.
+
+For best results, avoid altering any existing fields, especially required ones, as this will likely result in breaking existing deployed components.
+
+h2(#rebuilding). Rebuilding and Updating Components
+
+First check out the svmp-protocol-def project
+
+<pre>
+git clone https://github.com/SVMP/svmp-protocol-def
+</pre>
+
+You will also need the "Protocol Buffers v2.5.0":https://code.google.com/p/protobuf/ tools installed, specifically the protoc compiler.
+
+h3(#server). SVMP Server
+
+The SVMP Server utilizes a Javascript library that interprets the protocol specification file at run time so no code generation is required in this case. Simply copy the updated <code>svmp.proto</code> file into the <code>svmp-server/protocol/</code> directory, overwriting the copy already there. Then restart the server process.
+
+h3(#android). Android Client
+
+Both the Android client application and the SVMP daemon contained within the virtual device image itself utilize a Java code library generated from the protocol buffer specification file. This Java code is contained in the svmp-protocol-def and must be regenerated for any protocol changes to take effect.
+
+To re-generate the Java code in the svmp-protocol-def package in the Android client:
+
+<pre>
+cd svmp-android-client/svmp-protocol-def
+protoc --java_out=src/ svmp.proto
+</pre>
+
+Then rebuild the client as normal.
+
+h3(#vm). Virtual Machine Image
+
+Like the Android client, the virtual device image uses the Java code library generated from the protocol definition file.
+
+To re-generate it in the VM code tree:
+
+<pre>
+cd external/svmp/svmp-protocol-def
+protoc --java_out=src/ svmp.proto
+</pre>
+
+The run the VM build script as normal.
+
+h3(#ios). iOS Client
+
+Under construction

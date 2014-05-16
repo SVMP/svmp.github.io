@@ -43,7 +43,7 @@ By default, the client application will use Android's built-in CA cert store whe
 
 Place your chosen certificates into the <code>svmp-android-client/server_certs/</code> directory in PEM format. The build process will pick up any files with a <code>.pem</code> extension in that directory and compile them into the pin list.
 
-If you do not wish to use pinning, leave this directory empty. If using your own self-signed certificates, you can either place the cert in the pin list here, or enable allowing untrusted certs from with the application at run-time. See the "client configuration guide":client-android-install.html for more information.
+If you do not wish to use pinning, leave this directory empty. If using your own self-signed certificates, you can either place the cert in the pin list here, or enable allowing untrusted certs from with the application at run-time. See the "client configuration guide":client-android-install.html for more information on the latter.
 
 h2. IDEs
 
