@@ -3,6 +3,48 @@ layout: default
 title: Build SVMP Android App
 ---
 
-Follow the instructions in the client "README":https://github.com/SVMP/svmp-android-client/blob/svmp-1.1/README.md
+h2. Prerequisites
 
-Install the resulting APK to an Android 4.0 or newer device and add a new connection for your an SVMP server.
+* "Apache Ant":http://ant.apache.org/
+* Java JDK 6 with correctly set `JAVA_HOME` environment variable
+* "Android SDK":https://developer.android.com/sdk/index.html with API level 19 and the platform tools installed
+* "Android NDK":https://developer.android.com/tools/sdk/ndk/index.html Revision 9d or newer
+
+See the Android "developer documentation":https://developer.android.com/sdk/index.html for more information.
+
+h2. Build Steps
+
+Check out the SVMP client and protocol side-by-side in a directory of your choice
+
+  <pre>
+  git clone https://github.com/SVMP/svmp-protocol-def.git
+  git clone https://github.com/SVMP/svmp-android-client.git
+  </pre>
+
+Build the client using ant.
+
+  <pre>
+  cd svmp-android-client
+  ant debug
+  </pre>
+
+Additional ant commands are documented "here":https://developer.android.com/tools/building/building-cmdline.html#AntReference.
+
+Gradle build files are also included in addition to Ant. Gradle 1.10, 1.11, or 1.12 is required. To build the application using gradle:
+
+<pre>
+cd svmp-android-client
+gradle build
+</pre>
+
+h2. Building with Server Certificate Pinning
+
+By default, the client application will use Android's built-in CA cert store when connecting to TLS-protected servers. To allow only specific server certificates or specific signing CAs, you can add your own set of "pinned" certificates at build time.
+
+Place your chosen certificates into the <code>svmp-android-client/server_certs/</code> directory in PEM format. The build process will pick up any files with a <code>.pem</code> extension in that directory and compile them into the pin list.
+
+If you do not wish to use pinning, leave this directory empty. If using your own self-signed certificates, you can either place the cert in the pin list here, or enable allowing untrusted certs from with the application at run-time. See the "client configuration guide":client-android-install.html for more information.
+
+h2. IDEs
+
+Instructions for setting up projects for SVMP in the Eclipse and IntelliJ IDEA IDEs are included in the "README":https://github.com/SVMP/svmp-android-client/blob/master/README.md.

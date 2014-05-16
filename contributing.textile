@@ -25,7 +25,7 @@ Send suggestions for improvements or new features to the "developer mailing list
 
 h2(#submitting). Submitting Patches
 
-Eventually all submissions will be handled through a "Gerrit code review server:https://svmp-review.mitre.org. Until that server is activated, please submit pull requests through Github or send patches to the "mailing list":dev-list.
+Eventually all submissions will be handled through a "Gerrit code review server":https://svmp-review.mitre.org. Until that server is activated, please submit pull requests through Github or send patches to the "mailing list":dev-list.
 
 h3. Commit formatting
 
