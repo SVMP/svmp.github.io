@@ -7,7 +7,7 @@ The Secure Virtual Mobile Platform provides a _virtual smartphone_ tailored for 
 
 The core of the platform is an OS image based on the "Android Open Source Project":https://source.android.com/ that we have optimized for running on top of virtualization and cloud platforms such as KVM and OpenStack. Also included are front-end client applications for Android and iOS that can log into the remote desktop of the virtual device. Thanks to WebRTC technology, we are even able to make this work seamlessly over 3G and 4G cellular links.
 
-h2(#uses). What's it Good For?
+h2(#uses). Uses
 
 There are many possible use cases for SVMP. We built and released it here so it can become the foundation for whole new class of mobile capabilities. We would love to hear what novel ideas the community invents with these building blocks. Here are some we have thought of:
 

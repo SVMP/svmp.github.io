@@ -7,8 +7,6 @@ Because the protocol is specified and generated using the Protocol Buffers forma
 
 For best results, avoid altering any existing fields, especially required ones, as this will likely result in breaking existing deployed components.
 
-h2(#rebuilding). Rebuilding and Updating Components
-
 First check out the svmp-protocol-def project
 
 <pre>
@@ -17,11 +15,11 @@ git clone https://github.com/SVMP/svmp-protocol-def
 
 You will also need the "Protocol Buffers v2.5.0":https://code.google.com/p/protobuf/ tools installed, specifically the protoc compiler.
 
-h3(#server). SVMP Server
+h2(#server). SVMP Server
 
 The SVMP Server utilizes a Javascript library that interprets the protocol specification file at run time so no code generation is required in this case. Simply copy the updated <code>svmp.proto</code> file into the <code>svmp-server/protocol/</code> directory, overwriting the copy already there. Then restart the server process.
 
-h3(#android). Android Client
+h2(#android). Android Client
 
 Both the Android client application and the SVMP daemon contained within the virtual device image itself utilize a Java code library generated from the protocol buffer specification file. This Java code is contained in the svmp-protocol-def and must be regenerated for any protocol changes to take effect.
 
@@ -34,7 +32,7 @@ protoc --java_out=src/ svmp.proto
 
 Then rebuild the client as normal.
 
-h3(#vm). Virtual Machine Image
+h2(#vm). Virtual Machine Image
 
 Like the Android client, the virtual device image uses the Java code library generated from the protocol definition file.
 
@@ -47,6 +45,6 @@ protoc --java_out=src/ svmp.proto
 
 The run the VM build script as normal.
 
-h3(#ios). iOS Client
+h2(#ios). iOS Client
 
 Under construction

@@ -7,7 +7,7 @@ h2(#feedback). Providing Feedback
 
 We don't have a central internet facing issue tracker at this time. Until such time that we do, please use the mailing list and Github bug trackers.
 
-h3. Bug Reports
+h3(#bugs). Bug Reports
 
 Send a note to the "developer mailing list":dev-list and create a new issue in the most appropriate Github project tracker.
 
@@ -19,7 +19,7 @@ Be as specific as you can about the failure, the conditions under which it occur
 ** "iOS":https://github.com/SVMP/svmp-iOS-client/issues
 * "SVMP Server":https://github.com/SVMP/svmp-server/issues
 
-h3. Feature Suggestions
+h3(#features). Feature Suggestions
 
 Send suggestions for improvements or new features to the "developer mailing list":dev-list.
 
@@ -27,7 +27,7 @@ h2(#submitting). Submitting Patches
 
 Eventually all submissions will be handled through a "Gerrit code review server":https://svmp-review.mitre.org. Until that server is activated, please submit pull requests through Github or send patches to the "mailing list":dev-list.
 
-h3. Commit formatting
+h3(#commit-formatting). Commit formatting
 
 First, make sure to configure git with your real name and email address.
 
@@ -41,13 +41,13 @@ Please try to stick to the following format for patches as much as possible:
 
 "More information on writing good commit messages.":https://source.android.com/source/submit-patches.html#make-your-change
 
-h3. Merge commits
+h3(#merge). Merge commits
 
 Don't do them. We prefer a straight-line commit history for the SVMP repositories wherever possible as this is the preference of the Gerrit code review tool that manages all the git repositories. Please rebase your patches into a straight-line, fast-forwardable patch series before pushing.
 
 If you find yourself needing to do a merge commit and have a really good reason for doing so, send a message to the "developer mailing list":dev-list explaining what you are trying to do and ask for assistance on how to proceed.
 
-h3. Gerrit, repo, and the Change-id line
+h3(#gerrit). Gerrit, repo, and the Change-id line
 
 All code contributions go through a Gerrit code review server before being merged to the mainline release. To track different versions of a proposed patch, Gerrit uses a "Change-id" line in the commit message.
 
@@ -62,13 +62,13 @@ You may also find the `git-review` tool useful when working with repositories ma
 * "MediWiki's Gerrit workflow instructions":http://www.mediawiki.org/wiki/Gerrit/git-review
 * "OpenStack's Gerrit workflow instructions":https://wiki.openstack.org/wiki/Gerrit_Workflow
 
-h3. License and Copyright
+h3(#license). License and Copyright
 
 SVMP is distributed primarily under the "Apache License, Version 2.0":https://www.apache.org/licenses/LICENSE-2.0.html.
 
 We do not ask for a copyright assignment for code contributions. We do however ask that you provide patches in a way that is "compatible with inclusion":https://www.apache.org/legal/resolved.html#category-a into an Apache licensed project. When modifying existing files, you may choose to add a brief note to the header comments with your name, the date, and what you modified to make changes easier to track. If adding new files, place an appropriate copyright and license notice in the file header. "Files without an explicit open source license":https://help.github.com/articles/open-source-licensing#what-happens-if-i-dont-choose-a-license have to be considered "All Rights Reserved" and cannot be included.
 
-h3. Signed-off-by
+h3(#signed-off). Signed-off-by
 
 _Patches without a Signed-off-by line cannot be considered for inclusion, and will in fact be rejected by the Gerrit code review system._
 

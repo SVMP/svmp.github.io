@@ -3,7 +3,7 @@ layout: default
 title: Build SVMP Android App
 ---
 
-h2. Prerequisites
+h2(#prereq). Prerequisites
 
 * "Apache Ant":http://ant.apache.org/
 * Java JDK 6 with correctly set `JAVA_HOME` environment variable
@@ -12,7 +12,7 @@ h2. Prerequisites
 
 See the Android "developer documentation":https://developer.android.com/sdk/index.html for more information.
 
-h2. Build Steps
+h2(#build). Build Steps
 
 Check out the SVMP client and protocol side-by-side in a directory of your choice
 
@@ -37,7 +37,7 @@ cd svmp-android-client
 gradle build
 </pre>
 
-h2. Building with Server Certificate Pinning
+h2(#cert-pinning). Building with Server Certificate Pinning
 
 By default, the client application will use Android's built-in CA cert store when connecting to TLS-protected servers. To allow only specific server certificates or specific signing CAs, you can add your own set of "pinned" certificates at build time.
 
@@ -45,6 +45,6 @@ Place your chosen certificates into the <code>svmp-android-client/server_certs/<
 
 If you do not wish to use pinning, leave this directory empty. If using your own self-signed certificates, you can either place the cert in the pin list here, or enable allowing untrusted certs from with the application at run-time. See the "client configuration guide":client-android-install.html for more information on the latter.
 
-h2. IDEs
+h2(#ide). IDEs
 
 Instructions for setting up projects for SVMP in the Eclipse and IntelliJ IDEA IDEs are included in the "README":https://github.com/SVMP/svmp-android-client/blob/master/README.md.

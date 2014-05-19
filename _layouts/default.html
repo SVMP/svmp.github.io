@@ -19,6 +19,7 @@
           <li>About
             <ol class="toc">
               <li><a href='index.html'>Welcome</a></li>
+<!--              <li><a href-'news.html'>Project News</a></li> -->
               <li><a href='architecture.html'>Architecture</a></li>
               <li><a href='quick_start.html'>Quick Start</a></li>
               <li><a href='https://github.com/SVMP/svmp.github.io/wiki'>Community Wiki</a></li>
@@ -68,6 +69,7 @@
       </div>
       <div id='content'>
         <h1>{{ page.title }}</h1>
+        <div class="table-of-contents"></div>
         {{ content }}
       </div>
       <div id='footer'>The contents of this website are copyright &copy; 2012-2014 <a href="http://www.mitre.org/">The MITRE Corporation</a>.</div>
@@ -82,5 +84,7 @@
       ga('send', 'pageview');
 
     </script>
+    <script src='https://code.jquery.com/jquery-1.11.1.min.js'></script>
+    <script src='scripts/toc.js'></script>
   </body>
 </html>

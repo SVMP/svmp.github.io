@@ -3,7 +3,7 @@ layout: default
 title: Downloading the Code
 ---
 
-h2. Android Client
+h2(#android-client). Android Client
 
 To work with the Android client, check both the client and protocol projects out side by side.
 
@@ -12,15 +12,15 @@ $ git clone https://github.com/SVMP/svmp-android-client
 $ git clone https://github.com/SVMP/svmp-protocol-def
 </pre>
 
-h2. iOS Client
+h2(#ios-client). iOS Client
 
-h2. SVMP Server
+h2(#server). SVMP Server
 
 <pre>
 $ git clone https://github.com/SVMP/svmp-server
 </pre>
 
-h2. SVMP AOSP VM
+h2(#vm). SVMP AOSP VM
 
 Checking out the code for the VM itself works similarly to downloading the "Google AOSP code":http://source.android.com/source/downloading.html.
 
