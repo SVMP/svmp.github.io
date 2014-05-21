@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Build SVMP Android App
+title: Build the App for Android
 ---
 
 h2(#prereq). Prerequisites
@@ -48,3 +48,5 @@ If you do not wish to use pinning, leave this directory empty. If using your own
 h2(#ide). IDEs
 
 Instructions for setting up projects for SVMP in the Eclipse and IntelliJ IDEA IDEs are included in the "README":https://github.com/SVMP/svmp-android-client/blob/master/README.md.
+
+h2(#install). Install

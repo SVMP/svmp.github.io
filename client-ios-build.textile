@@ -1,4 +1,30 @@
 ---
 layout: default
-title: Build SVMP iOS App
+title: Building the App for iOS
 ---
+
+h2(#prereq). Prerequisites
+
+* "Xcode 5.1.x":https://developer.apple.com/xcode/downloads/
+
+h2(#build). Build Steps
+
+Checkout the SVMP client into a directory of your choice:
+
+<pre>
+$ git clone https://github.com/SVMP/svmp-iOS-client.git
+</pre>
+
+Download the submodules:
+
+<pre>
+$ git submodule update --init
+</pre>
+
+Open up the Xcode project at <code> svmp-iOS-client/ios-example/Svmp-iOS-Client.xcodeproj</code>.
+
+h2(#install). Install
+
+Click the Run button to launch the application on your iPhone or iPad.
+
+The SVMP client will not work with the iOS simulator.
