@@ -61,3 +61,5 @@ First enable installing applications from "Unknown Sources":https://developer.an
   ... or ...
   adb install bin/ConnectionList-debug.apk
   </pre>
+
+*Note*: The SVMP client application does not function correctly in the Android SDK Emulator due to its use of certain OpenGL ES calls.
