@@ -1,22 +1,23 @@
 ---
 layout: default
-title: Secure Virtual Mobile Platform
+title: Virtual Smart Phones in the Cloud
 ---
 
-The Secure Virtual Mobile Platform provides a _virtual smartphone_ tailored for running in the cloud. It helps solve many of the problems of secure containers and "bring your own device" by treating a user's physical phone as a terminal for remotely accessing a virtual phone running safely in a datacenter. The virtual device can then be hardened to become a secure bastion for accessing enterprise apps and data.
+The Secure Virtual Mobile Platform is a free and open source system for running _virtual smartphones_ in the cloud. It helps solve many of the problems of secure containers and "bring your own device" by treating a user's physical phone as a terminal for remotely accessing a virtual smartphone running off-the-shelf smartphone apps. These virtual devices, operating safely in a datacenter, then provide a secure bastion for accessing sensitive apps and data.
 
-The core of the platform is an OS image based on the "Android Open Source Project":https://source.android.com/ that we have optimized for running on top of virtualization and cloud platforms such as KVM and OpenStack. Also included are front-end client applications for Android and iOS that can log into the remote desktop of the virtual device. Thanks to WebRTC technology, we are even able to make this work seamlessly over 3G and 4G cellular links.
+The core of the platform is an OS image based on the "Android Open Source Project":https://source.android.com/ that we have optimized for running on top of virtualization and cloud platforms such as KVM and OpenStack. Also included are front-end client applications for Android and iOS that can log into the remote desktop of the virtual device. Unlike traditional remote desktop applications designed for keyboard and mouse input, SVMP lets users interact naturally with remote applications using native mobile inputs like multi-touch, location, and sensors. Thanks to "WebRTC":http://www.webrtc.org/ technology, all this even works seamlessly over 3G and 4G cellular networks.
 
 h2(#uses). Uses
 
 There are many possible use cases for SVMP. We built and released it here so it can become the foundation for whole new class of mobile capabilities. We would love to hear what novel ideas the community invents with these building blocks. Here are some we have thought of:
 
+* Run mobile applications without the resource the resource contraints of fitting on a smartphone
 * Keep sensitive data off of easily lost and stolen phones
 * Segregate different classes of data and workloads into isolated virtual environments (either business apps on a personal phone or personal apps on a business phone)
 * Offload expensive security monitoring and analysis from resource constrained smartphones
 * Provide better visibility into network and data usage
 * Streaming backup & rapid reconstitution
-* Application testing and portability
+* Application testing, portability, and delivery
 
 h2(#features). Features
 
