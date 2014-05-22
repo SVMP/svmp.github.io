@@ -7,6 +7,8 @@ The Secure Virtual Mobile Platform is a free and open source system for running 
 
 The core of the platform is an OS image based on the "Android Open Source Project":https://source.android.com/ that we have optimized for running on top of virtualization and cloud platforms such as KVM and OpenStack. Also included are front-end client applications for Android and iOS that can log into the remote desktop of the virtual device. Unlike traditional remote desktop applications designed for keyboard and mouse input, SVMP lets users interact naturally with remote applications using native mobile inputs like multi-touch, location, and sensors. Thanks to "WebRTC":http://www.webrtc.org/ technology, all this even works seamlessly over 3G and 4G cellular networks.
 
+It is designed to be easily deployable as an application on top of existing virtualization systems and public/private clouds like "OpenStack":https://www.openstack.org/.
+
 h2(#uses). Uses
 
 There are many possible use cases for SVMP. We built and released it here so it can become the foundation for whole new class of mobile capabilities. We would love to hear what novel ideas the community invents with these building blocks. Here are some we have thought of:
