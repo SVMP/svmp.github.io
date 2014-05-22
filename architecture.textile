@@ -1,12 +1,86 @@
 ---
 layout: default
-title: System Architecture
+title: System Design and Architecture
 ---
 
-h2(#app). Application Architecture
+h2(#app). Cloud Application Architecture
+
+SVMP relies heavily on cloud APIs to manage the life cycle of the virtual smartphone devices. This lets us accomodate a variety of different deployment environments with ease. At a high level it resembles a traditional desktop-oriented thin-client system. It also has elements that resemble voice and video over IP services like XMPP or SIP, since we reuse several of those technologies via WebRTC for transporting the remote desktop video and audio data.
+
+The main components are:
+* The client application on users' phones or tablets
+* The SVMP Server the clients connect to
+* The virtual device "gold image" and per-user set of persistent data volumes
+* The cloud controller that serves the API of the underlying cloud
 
 <img style="width:42em;" src="images/cloud-app-arch.png" />
 
-h2(#vm). Virtual Device
+h3. Client Application
+
+The front-end SVMP client application is a simple, unprivileged application installed on a user's Android or iOS phone or tablet. This application is quite similar in scope to existing remote desktop clients for VNC or RDP servers. Users configure server connections in the client's menu, enter their login info, and are presented with a display of the remote virtual smartphone.
+
+The similarities end when the user begins to interact with the remote device. Instead of emulating a mouse and keyboard, the SVMP client captures native touch-screen events, sensor inputs like accelerometer and gyroscope, location information for mapping apps, and some two-way inter-app messaging for notification popups and "Intents":https://developer.android.com/training/basics/intents/index.html. This enables interacting with remote mobile apps in the same ways as with local apps using gestures like pinches and swipes, tilting and rotating, getting GPS location, and even letting apps launch other apps (e.g., to dial a phone number or open a URL).
+
+All of these inputs are packaged into "SVMP protocol messages":protocol.html and sent up to the server.
+
+The client also creates a WebRTC peer connection with the virtual device. Video and audio output from the virtual device flows back across this link and is played back to the user, completing the loop.
+
+h3. SVMP Server
+
+The SVMP server is the primary internet-facing component of the system. This is what goes on your DMZ.
+
+It is responsible for receiving login requests from users, performing authentication against a database or external identity service, creating and managing virtual machines on the cloud, and routing input messages from client connections to the SVMP daemons running inside the virtual devices.
+
+The server is designed for modularity and scalability so multiple instances can be run behind a load balancer to service large numbers of simultaneous users.
+
+h3. Virtual Device Image
+
+This image encapsulates the core operating system of the virtual smartphone device, including the kernel, boot files, and Android framework services. Different cloud and virtualization platforms handle this image in different ways, for example, a Glance image in OpenStack or an AMI on Amazon EC2.
+
+h3. User Data Volumes
+
+The user data volumes provide the storage for users' "roaming profiles." These are typically backed by block storage volumes (e.g. OpenStack Cinder, Amazon EBS) provided by the cloud infrastructure.
+
+These volumes are used for the <code>/data</code> filesystem tree within the Android-based virtual devices. Android has the useful property of keeping all of a user's data, installed applications, settings, and preferences in this filesystem making it easy to package and move this data from one virtual device to another.
+
+h3. Cloud Controller
+
+The cloud controller is not a part of SVMP software itelf, but performs an important role in the SVMP system. The SVMP server is configured with credentials that allow it to perform VM creation, deletion, and maintenance operations on the underlying cloud infrastructure.
+
+When new virtual phone VMs need to be created, the SVMP server makes a request to the cloud controller to create a new VM cloned from the current device image. It also orders the controller to attach the user's data volume to the freshly created instance. When the user has logged off and the VM fallen idle, the SVMP server finally tells the cloud controller to delete the instance to make room for future connections.
+
+h2(#vm). Virtual Device Structure
+
+AOSP can compile and run on x86 processors out of the box, but it's missing any ways to interact with it remotely. SVMP adds a set of virtual input devices, video streaming output, and some other customizations to enable a rich remote access experience.
+
+The main components are:
+* The central SVMP daemon
+* Touch-screen input injection
+* Virtual sensors
+* Location update pub/sub
+* Notification and Intent forwarding and re-broadcast
+* Virtual framebuffer, video encoding, and streaming
 
 <img style="width:42em;" src="images/vm-arch.png" />
+
+h3. SVMP daemon
+
+Also referred to as the SVMP _eventserver_, this daemon is the primary entry point of client user input to the virtual device.
+
+The code for this module resides in the "SVMP/android_external_svmp_eventserver":https://github.com/SVMP/android_external_svmp_eventserver repository and checks out to the path <code>external/svmp/svmpd</code> in the source code tree.
+
+h3. Touch Input
+
+h3. Sensors
+
+h3. Location
+
+h3. Intents and Notifications
+
+h3. Video
+
+h3. Versioning
+
+SVMP version 1.0 and earlier are based on Android 4.0.4 "Ice Cream Sandwich". Versions 1.1 through 1.4 are based on Android 4.2.2 "Jelly Bean".
+
+Going forward, the SVMP major version number will increment when we upgrade from one Android "letter" series to the next. For example, SVMP 2.x will be based on Android 4.4.x "KitKat", and SVMP 3.x will correspond with the "L" version of Android.

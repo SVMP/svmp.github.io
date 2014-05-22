@@ -3,6 +3,8 @@ layout: default
 title: Contributing
 ---
 
+We hope to build a vibrant community-driven effort to carry SVMP into the future. We welcome your participation in any way, big or small, be it reporting bugs, sharing ideas for interesting new features, or contributing code. SVMP today provides a valuable capability, but more importantly it is a foundation for fantastic new creations of tomorrow.
+
 h2(#feedback). Providing Feedback
 
 We don't have a central internet facing issue tracker at this time. Until such time that we do, please use the mailing list and Github bug trackers.
