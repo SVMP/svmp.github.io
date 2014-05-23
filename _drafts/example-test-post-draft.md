@@ -1,5 +1,5 @@
 ---
-layout: posts
+layout: default
 title: Testing. Will it work?
 ---
 
