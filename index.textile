@@ -61,14 +61,9 @@ Public & Private Clouds
 
 h2(#news). What's New
 
-Highlights from SVMP 1.4.0 (May 15, 2014)
-
-* Substantial rewrite of the Android client to move logged in server connections into a persistent background service.
-* Refactored svmp-server for better modularity
-* Upgraded WebRTC version to upstream v3.52 improving video performance and stability
-* VM reports nicer values for network and power status
-* Various bug fixes all around
-* This web site
+{% for post in site.posts limit: 5 %}
+<p><a href="{{ post.url }}">{{ post.title }}</a></p>
+{% endfor %}
 
 h2(#credits). Credits & Notices
 
