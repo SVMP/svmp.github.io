@@ -1,9 +1,10 @@
 ---
 layout: default
 title: SVMP 1.4.0 Released
+date: 2014-05-16 16:00:43 -0400
 ---
 
-SVMP 1.4.0 was released on Friday, May 16 2014. This release brings some major changes to the the Android client and SVMP server. The Android client was substantially rewritten to move logged in server connections into a persistent background service. The SVMP server receiving a thorough refactoring for better modularity, maintainability, and scalability. The clients and VM image were updated to a newer upstream release of the WebRTC library, improving video performance and stability in the process. Various other minor features and bug fixes were implemented too. Read on for more details.
+The 1.4 release of SVMP brings some major changes to the the Android client and SVMP server. The Android client was substantially rewritten to move logged in server connections into a persistent background service. The SVMP server receiving a thorough refactoring for better modularity, maintainability, and scalability. The clients and VM image were updated to a newer upstream release of the WebRTC library, improving video performance and stability in the process. Various other minor features and bug fixes were implemented too. Read on for more details.
 
 ## Detailed Change Log
 
@@ -22,7 +23,7 @@ Android Client
 
 iOS Client
 
-* Updated WebRTC library to v3.52
+* Updated WebRTC library to v3.52 (not yet finished)
 * Fixed build for iOS 7.1 SDK
 * Added universal build support for both iPhone and iPad
 * Remove internet connection test that doesn't work on private networks
@@ -39,6 +40,7 @@ SVMP Server
 * Added command line tool option to wipe all session token entries for a user
 * Added a 60 second timeout to client socket connections to [work around problem with svmpd](https://github.com/SVMP/svmp-server/commit/1c8e416b1c608b04600ae65daa5ffa135af4eda7)
 * Improved config file documentation
+* Fixed schema error if using too new a version of the mongoose module by pinning the old version
 
 VM
 
