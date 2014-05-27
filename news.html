@@ -5,6 +5,7 @@ title: Project News
 
 {% for post in site.posts %}
 <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+<p><i>Date: {{ post.date | date: "%a %b %e %Y" }}</i></p>
 {{ post.excerpt }}
 <p><a href="{{ post.url }}">Keep reading...</a></p>
 {% endfor %}
