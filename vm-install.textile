@@ -27,10 +27,10 @@ h2(#kvm). KVM
 Convert android_system_disk.img and android_data_disk.img to QCOW2 format using qemu-img.
 
 <pre>
-    $ qemu-img -o compat=0.10 -f raw -O qcow2 android_system_disk.img \
-      android_system_disk.qcow2
-    $ qemu-img -o compat=0.10 -f raw -O qcow2 android_data_disk.img \
-      android_data_disk.qcow2
+    $ qemu-img convert -o compat=0.10 -f raw -O qcow2 \
+      android_system_disk.img android_system_disk.qcow2
+    $ qemu-img convert -o compat=0.10 -f raw -O qcow2 \
+      android_data_disk.img android_data_disk.qcow2
 </pre>
 
 If using virtio para-virtualized disks, make sure to have answered Yes in that part of the build-svmp script.
