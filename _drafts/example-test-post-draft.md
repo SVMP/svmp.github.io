@@ -1,6 +1,16 @@
 ---
 layout: default
-title: Testing. Will it work?
+title: Title of the Post
 ---
 
-Who knows. Let's find out.
+Release X.Y.Z. Blah blah blah. Added a load of cool features. Fixed every bug.
+
+## Detailed Change Log
+
+Android Client
+
+iOS Client
+
+SVMP Server
+
+VM

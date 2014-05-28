@@ -1,6 +1,7 @@
 ---
 layout: default
 title: SVMP 1.3.1 Released
+date: 2014-03-26
 ---
 
 The 1.3.1 release of SVMP fixes some outstanding issues found while deploying the 1.3 version for testing. There are no tags in the git repositories corresponding to this release, although there are branches in the Android client and SVMP server. Most are backported fixes from the development branches of the forthcoming 1.4 release. Changes to the Android VM image went directly into the master or svmp-1.1 branches, and will be picked up in future tagged releases. Major changes include better support for VMs with tablet-sized screen dimentions and orientation, more resilient /data volume mounting, and a pair of critical Android client bugfixes.
