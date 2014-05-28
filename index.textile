@@ -62,7 +62,7 @@ Public & Private Clouds
 h2(#news). What's New
 
 {% for post in site.posts limit: 5 %}
-<p><a href="{{ post.url }}">{{ post.title }}</a></p>
+<p><a href="{{ post.url }}">{{ post.title }}</a> &mdash; <i>{{ post.date | date: "%D" }}</i></p>
 {% endfor %}
 
 h2(#credits). Credits & Notices
