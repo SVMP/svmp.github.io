@@ -3,7 +3,14 @@ layout: default
 title: Mailing Lists
 ---
 
-|_. users       |_. For discussion, help running, and development of SVMP |
-| Post          | "project-svmp-list@lists.mitre.org":mailto:project-svmp-list@lists.mitre.org |
-| Subscribe     | "Send 'subscribe project-svmp-list' to listserv@lists.mitre.org":mailto:listserv@lists.mitre.org?body=subscribe%20project-svmp-list |
-| Unsubscribe   | "Send 'signoff project-svmp-list' to listserv@lists.mitre.org":mailto:listserv@lists.mitre.org?body=signoff%20project-svmp-list |
+|_. users       |_. For discussion and help using of SVMP |
+| Post          | "svmp-users@googlegroups.com":mailto:svmp-users@googlegroups.com |
+| View          | "https://groups.google.com/d/forum/svmp-users":https://groups.google.com/d/forum/svmp-users |
+| Subscribe     | "svmp-users+subscribe@googlegroups.com":mailto:svmp-users+subscribe@googlegroups.com |
+| Unsubscribe   | "svmp-users+unsubscribe@googlegroups.com":mailto:svmp-users+unsubscribe@googlegroups.com |
+
+|_. dev         |_. For development of the SVMP software itself |
+| Post          | "svmp-dev@googlegroups.com":mailto:svmp-dev@googlegroups.com |
+| View          | "https://groups.google.com/d/forum/svmp-dev":https://groups.google.com/d/forum/svmp-dev |
+| Subscribe     | "svmp-dev+subscribe@googlegroups.com":mailto:svmp-dev+subscribe@googlegroups.com |
+| Unsubscribe   | "svmp-dev+unsubscribe@googlegroups.com":mailto:svmp-dev+unsubscribe@googlegroups.com |
