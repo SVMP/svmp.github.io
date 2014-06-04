@@ -71,13 +71,37 @@ The code for this module resides in the "SVMP/android_external_svmp_eventserver"
 
 h3. Touch Input
 
+The touch input events for the smartphone VM are generated on the client app as the user interacts with the video being shown and forwarded to the smartphone VM using protocol buffers. The code for the protocol buffer structure definitions resides in the "SVMP/svmp-protocol-def":https://github.com/SVMP/svmp-protocol-def repository. 
+
+The SVMP _eventserver_ , as described above, handles these touch input events and injects them into the Android Smartphone VM as they are received. The code for this can be found in the "SVMP/android_external_svmp_eventserver":https://github.com/SVMP/android_external_svmp_eventserver repository in the <code>handleTouch()</code> function in <code>src/org/mitre/svmp/events/EventServer.java</code>. 
+
 h3. Sensors
+
+The sensor events for the smartphone VM are also generated on the client app and forwarded using protocol buffers. The SVMP _eventserver_ forwards them to the local listening _<code>/dev/svmp_sensors</code>_ socket on the smartphone VM. The SVMP _eventserver_ code dealing with sensors can be found in the "SVMP/android_external_svmp_eventserver BaseServer.java":https://github.com/SVMP/android_external_svmp_eventserver repository in the <code>sendSensorEvent()</code> function in <code>src/org/mitre/svmp/events/BaseServer.java</code>.
+
+The SVMP HAL module libsensors listens on the _svmp_sensors_ socket then processes the actual sensor events. The libsensors HAL module code can be found in the "SVMP/android_device_mitre_svmp":https://github.com/SVMP/android_device_mitre_svmp repository.    
 
 h3. Location
 
+The location events are communicated both ways between the client app and the smartphone VM using protocol buffer messages. Any subscriptions intents requested by apps from the LocationManager on the Smartphone VM are passed back to the client app. The client then passes the Location information to the Smartphone VM.
+
+The code for dealing with location events on the client side can be found in the "SVMP/svmp-android-client":https://github.com/SVMP/svmp-android-client repository under <code>src/org/mitre/svmp/client/LocationHandler.java</code>.
+
+Similarly, the code for the smartphone VM side handling of location events can be found in the "SVMP/android_external_svmp_eventserver":https://github.com/SVMP/android_external_svmp_eventserver repository under <code>src/org/mitre/svmp/events/LocationHandler.java</code>. 
+
 h3. Intents and Notifications
 
+Currently, SVMP supports exchange of intents between the SVMP client app and the smartphone VM. SVMP client application supports receiving the ACTION_DIAL intent when a phone number URI is pressed in the smartphone VM and shows any notifications received from the smartphone VM. 
+
+Additionally, the client app allows forwarding URLs with ACTION_VIEW intent to the smartphone VM allowing for opening the URL inside the VM.
+
+The code for handling intents and notifications in the client app is part of the "SVMP/svmp-android-client":https://github.com/SVMP/svmp-android-client repository and can be found under <code>src/org/mitre/svmp/client/NetIntentsHandler.java</code> and <code>src/org/mitre/svmp/client/SendNetIntent.java</code>.
+
+The code for handling intents and forwarding notifications on the smartphone VM is available as part of the "SVMP/android_external_svmp_eventserver":https://github.com/SVMP/android_external_svmp_eventserver repository in <code>src/org/mitre/svmp/events/IntentHandler.java</code>.
+
 h3. Video
+
+
 
 h3. Versioning
 
