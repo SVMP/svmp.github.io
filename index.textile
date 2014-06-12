@@ -13,7 +13,7 @@ h2(#uses). Uses
 
 There are many possible use cases for SVMP. We built and released it here so it can become the foundation for whole new class of mobile capabilities. We would love to hear what novel ideas the community invents with these building blocks. Here are some we have thought of:
 
-* Run mobile applications without the resource the resource contraints of fitting on a smartphone
+* Run mobile applications without the resource contraints of fitting on a smartphone
 * Keep sensitive data off of easily lost and stolen phones
 * Segregate different classes of data and workloads into isolated virtual environments (either business apps on a personal phone or personal apps on a business phone)
 * Offload expensive security monitoring and analysis from resource constrained smartphones
