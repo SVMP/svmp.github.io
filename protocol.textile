@@ -12,11 +12,10 @@ However, some messages only have a type without additional attributes. For insta
 
 These message types can be viewed by looking at the "protocol definition":https://github.com/SVMP/svmp-protocol-def/blob/master/svmp.proto. Types are self-explanatory and separated based on what mechanism they are used for.
 An example of the protocol sequence is below, where the client authenticates with the server and establishes a connection with the virtual machine:
-!images/svmp-protocol-sequence.png!
+<img style="width:44em;" src="images/svmp-protocol-sequence.png" />
 
 Additionally, a sample server log containing protocol message information is below:
-<pre><code>
-info: New client connection from 192.168.0.223
+<pre><code>info: New client connection from 192.168.0.223
 debug: Reading Request, type: AUTH
 silly:   Body: {"type":"AUTH","authRequest":{"type":1,"username":"alice","password":"wonderland"}}
 debug: Attempting to authenticate...

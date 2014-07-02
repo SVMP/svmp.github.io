@@ -39,16 +39,27 @@ img {
 pre, code {
   font-family: "Monaco", "DejaVu Sans Mono", "Courier New", "Courier";
   font-size: 11pt;
+  /* Add color/border */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background-color: #f8f8f8;
 }
 pre {
   margin: 0.3em 0 0.3em 0.9em;
   padding: 0;
   line-height: 1.8em;
-  white-space: pre-wrap;       /* css-3 */
-  white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+  padding: 6px 10px;
+  /* Fix code block word wrapping and scroll bars */
+  white-space: pre;
+  overflow: auto;
+  word-wrap: normal;
 }
 pre br { display: none; }
-
+pre>code {
+  /* Make sure code tags that are inside pre tags don't have borders */
+  background-color: transparent;
+  border: none;
+}
 h1, h2, h3 {
   font-family: "Gill Sans";
   padding: 0;
