@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram>
+<source><![CDATA[#![SVMP Protocol Sequence]
+client:Client[a]
+server:Server[a]
+vm:Virtual Machine[a]
+
+*1 client
+State: CONNECTED
+*1
+*1 server
+State: UNAUTHENTICATED
+*1
+
+client:server.Request (AUTH, AuthRequest)
+server:client.Response (AUTH, AuthResponse)
+
+*2 client
+State: AUTH
+*2
+*2 server
+State: VMREADY_WAIT
+*2
+
+server:vm.Request (VIDEO_PARAMS, VideoStreamInfo)
+vm:client.Response (VMREADY)
+
+*3 client
+State: READY
+*3
+*3 server
+State: VMREADY_SENT
+*3
+
+client:
+client:server.Request (VIDEO_PARAMS)
+server:client.Response (VIDSTREAMINFO, VideoStreamInfo)
+
+*4 client
+State: RUNNING
+*4
+*4 server
+State: PROXYREADY
+*4
+
+client:
+client:vm.Request (TIMEZONE, string)
+
+client:vm.Request (LOCATION, LocationRequest)
+
+client:vm.Request (SCREENINFO)
+vm:client.Response (SCREENINFO, ScreenInfo)
+
+client:
+client:vm.Request (ROTATION_INFO, RotationInfo)
+
+client:vm.Request (WEBRTC, WebRTCMessage)
+vm:client.Response (WEBRTC, WebRTCMessage)]]></source>
+<configuration>
+<property name="activationBarBorderThickness" value="1"/>
+<property name="actorWidth" value="25"/>
+<property name="arrowColor" value="-14803256"/>
+<property name="arrowSize" value="6"/>
+<property name="arrowThickness" value="1"/>
+<property name="colorizeThreads" value="true"/>
+<property name="destructorWidth" value="30"/>
+<property name="explicitReturns" value="false"/>
+<property family="Dialog" name="font" size="14" style="0"/>
+<property name="fragmentBorderThickness" value="2"/>
+<property name="fragmentEdgeColor" value="-16751616"/>
+<property name="fragmentLabelBgColor" value="-52"/>
+<property name="fragmentMargin" value="8"/>
+<property name="fragmentPadding" value="10"/>
+<property name="fragmentTextPadding" value="5"/>
+<property name="glue" value="10"/>
+<property name="headHeight" value="35"/>
+<property name="headLabelPadding" value="5"/>
+<property name="headWidth" value="100"/>
+<property name="initialSpace" value="8"/>
+<property name="labeledBoxBgColor" value="-3355393"/>
+<property name="leftMargin" value="5"/>
+<property name="lifelineThickness" value="1"/>
+<property name="lineWrap" value="false"/>
+<property name="lowerMargin" value="5"/>
+<property name="mainLifelineWidth" value="8"/>
+<property name="messageLabelSpace" value="3"/>
+<property name="messagePadding" value="6"/>
+<property name="noteBgColor" value="-76"/>
+<property name="noteBorderThickness" value="1"/>
+<property name="noteMargin" value="6"/>
+<property name="notePadding" value="6"/>
+<property name="opaqueMessageText" value="false"/>
+<property name="returnArrowVisible" value="false"/>
+<property name="rightMargin" value="5"/>
+<property name="selfMessageHorizontalSpace" value="15"/>
+<property name="separatorBottomMargin" value="8"/>
+<property name="separatorTopMargin" value="15"/>
+<property name="shouldShadowParticipants" value="true"/>
+<property name="slackMode" value="true"/>
+<property name="spaceBeforeActivation" value="0"/>
+<property name="spaceBeforeAnswerToSelf" value="10"/>
+<property name="spaceBeforeConstruction" value="6"/>
+<property name="spaceBeforeSelfMessage" value="7"/>
+<property name="subLifelineWidth" value="0"/>
+<property name="tc0" value="-1118482"/>
+<property name="tc1" value="-256"/>
+<property name="tc2" value="-65536"/>
+<property name="tc3" value="-16776961"/>
+<property name="tc4" value="-16711936"/>
+<property name="tc5" value="-4144960"/>
+<property name="tc6" value="-65281"/>
+<property name="tc7" value="-14336"/>
+<property name="tc8" value="-20561"/>
+<property name="tc9" value="-12566464"/>
+<property name="threadNumbersVisible" value="false"/>
+<property name="threaded" value="true"/>
+<property name="upperMargin" value="5"/>
+<property name="verticallySplit" value="true"/>
+</configuration>
+</diagram>
