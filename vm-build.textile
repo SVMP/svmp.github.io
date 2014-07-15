@@ -31,9 +31,24 @@ Summary:
 
 1.  cd ${SVMP_AOSP_ROOT}
 2.  ./build-svmp.sh
-3.  Answer the questions as prompted according to your preference. If using a KVM-based virtualization platform with virtio support, answer Yes to the virtio support question, otherwise No.
-4.  Go get lunch.
+3.  Answer the questions as prompted according to your preference. If you save your settings at the end, the menus will be skipped next time.
+4.  "Compile":https://xkcd.com/303/
 
 A complete build of Android from a clean tree can take a substantial amount of time depending on your hardware. Upwards of an hour for a full build is not uncommon.
 
-_Note: All of the questions the build process asks can be overridden using environment variables. Look in device/mitre/svmp/build-svmp2.sh to see what variables can be set._
+_Note: All of the questions the build process asks can be overridden using environment variables. Look in device/mitre/svmp/build-svmp2.sh to see what variables can be set. And/or, set the same values in the .svmp.conf file in the AOSP root dir._
+
+h3. A Note on Custom Signing Keys
+
+If you choose to use custom signing keys, which we highly recommend you do, be aware that user data volumes will become bound to those signatures. If you try to attach a user data volume first initialized with one system image with one set of signatures, and then later pair it with another system image signed by a *different* set of keys, the instance will fail to boot.
+
+If you do need to move a /data partition to a differently signed VM, you can clear the cached signatures by deleting the following two files:
+
+* /data/system/packages.list
+* /data/system/packages.xml
+
+h3. All-in-one Image Builds
+
+Starting in SVMP 1.5.0, a new "all-in-one" build target was introduced. This option will create a single unified disk image contained both the system and data partitions in a single disk image. This is useful in cases where there is no need to have long-lived persistent data volumes connected and removed from short lived system instances.
+
+To select this option choose "All-in-one" as the "All-in-one image" page of the build script.

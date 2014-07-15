@@ -6,13 +6,9 @@ title: Installing and Running the VM
 
 h2(#vbox). VirtualBox
 
-# From ${SVMP_AOSP_ROOT}/out/target/product/svmp/ copy the files:
-    * android_system_disk.vdi
-    * android_data_disk.vdi
-# Create a VM in VBox using the android_system_disk.vdi as the first hard drive
-# Attach android_data_disk.vdi as a 2nd hard drive
-# Add a network interface such that the VM can communicate with the SVMP proxy server
-# Start it up
+In the build-svmp.sh script at the "Images to Build" screen, choose the "ovf-vbox" option. This will initiate a preset build with 2 virtual disks attached via a SATA controller in the resulting VM appliance.
+
+Import the resulting ${SVMP_AOSP_ROOT}/out/target/product/svmp/svmp_vbox.ova file via the VirtualBox File menu.
 
 Note for laptop users: VirtualBox will pass ACPI data from the host into the VM by default. If you start the VM while running on battery, VBox will incorrectly pass a "sleep" command to the VM causing it to immediately shutdown right after it's finished booting. To correct, either plug in to the wall or configure VBox to not do ACPI pass-through.
 
@@ -20,24 +16,25 @@ Note 2: You can add a serial port device to the VM to get access to dmesg and in
 
 h2(#vmware). VMware
 
-Same as for Virtual Box, but use android_system_disk.vmdk and android_data_disk.vmdk instead.
+In the build-svmp.sh script at the "Images to Build" screen, choose the "ovf-vmware" option. This will initiate a preset build with 2 virtual disks attached via a SCSI controller in the resulting VM appliance.
+
+Import the resulting ${SVMP_AOSP_ROOT}/out/target/product/svmp/svmp_vmware.ova file via the VirtualBox File menu.
 
 h2(#kvm). KVM
 
+There is not yet an appliance build for KVM, so a slightly longer approach is required.
+
+# In the "Image to Build" screen of the build script, choose "qcow2".
+# At the "Drive Type" screen, choose the appropriate model for the drive controller type you will be using. For virtio para-virtualized disks (recommended for best performance), select the "vdx" option.
+# Select "all-in-one" or "separate" system and data disks per your preference
+
+This build will create one or more qcow2 files in ${SVMP_AOSP_ROOT}/out/target/product/svmp/
+
 Convert android_system_disk.img and android_data_disk.img to QCOW2 format using qemu-img.
-
-<pre>
-    $ qemu-img convert -o compat=0.10 -f raw -O qcow2 \
-      android_system_disk.img android_system_disk.qcow2
-    $ qemu-img convert -o compat=0.10 -f raw -O qcow2 \
-      android_data_disk.img android_data_disk.qcow2
-</pre>
-
-If using virtio para-virtualized disks, make sure to have answered Yes in that part of the build-svmp script.
 
 h2(#openstack). OpenStack (with KVM compute nodes)
 
-# Convert the system and data disk .img files as in above for stand-alone KVM.
+# Build QCOW2 virtio images as per the KVM instructions above
 # Upload the resulting images to glance.
 # Create a cinder volume based on the android_data_disk glance image. This will become the master copy that every new user's persistent data disk is cloned or snapshotted from.
 # Launch a new VM instance from the system disk image. Use a flavor that has at least 1GB for the root disk and 1GB of RAM. Ephemeral disk can be left as zero.
@@ -65,11 +62,19 @@ Debugging (ADB and SSH shells)
 
 h2(#datadisk). Data Disks
 
+h3. SVMP 1.5.0+
+
+In SVMP 1.5.0 and newer, the data disk is automatically created from scratch by the build system based on the settings in the BoardConfig.mk and image_build/svmp_*_image_layout.conf files in device/mitre/svmp/.
+
+Also in 1.5.0, the cache partition has moved from data disk to the system disk. For backwards compatibility, the data volumes created will still contain a partition in the slot previously occupied by cache, so old data volumes will still work on newer VM versions.
+
+To customize the data partition size simply alter the value (in bytes) of BOARD_USERDATAIMAGE_PARTITION_SIZE in BoardConfig.mk to something of your choosing. If necessary, also adjust the "num_lba" value in the layout.conf file so to sufficient size for all the contained partitions.
+
+h3. SVMP 1.4.1 and below
+
 The default data disk created by the build system and output as android_data_disk.img is a 5GB disk with 4GB assigned to /data and 1GB to /cache.
 
 Several alternate images in a variety of sizes can be found in 'device/mitre/svmp/data-disk-blanks' named by the size of the /data partition. All contain a 1GB cache partition.
-
-h3. Creating a new data disk image from scratch
 
 If the prebuilt images don't fulfill your needs you can create a custom blank data disk with the following steps.
 
