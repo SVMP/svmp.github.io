@@ -1,4 +1,45 @@
 ---
 layout: default
-title: Install and Run the Android Client
+title: Using the Android Client
 ---
+
+h2(#newconn). Add a New Connection
+ 
+When you first open the client, you need to add a new connection before connecting to an SVMP server. Starting from the *Connection List* screen, tap the @New@ button to begin adding a new connection. This will bring you to the *Connection Details* screen. Fill out the information for the SVMP server and tap @Save@. This will bring you back to the *Connection List* screen, and you will see a new Connection entry in the list. Long-press the Connection to see some context options:
+you can long-press a connection to view various options to interact with it.
+* @Edit connection@ will bring you to the *Connection Details* screen to edit the Connection.
+* @Remove connection@ will remove the Connection.
+* @Change password@ will bring up a prompt allowing you to change your password.
+* @Stop service@ will be displayed if the SVMP Service is running in the background for this connection, allowing you to stop the background process.
+ 
+h2(#runapps). View and Run Remote Apps
+ 
+Starting from the *Connection List* screen, find the Connection you want to use and tap it.
+_Note: if the 'Use desktop mode' preference is enabled, you must tap the @Apps@ button instead._
+This will bring you to the *App List* screen, your remote app drawer for this Connection. You will see two tabs, *All Apps* and *Favorites*.
+ 
+If this is a new Connection, the app drawer will be empty. Tap your device's @Menu@ button and you will see two options to refresh your apps:
+* @Refresh apps (quick)@ will query the SVMP Server for any new or changed apps, and update accordingly.
+* @Refresh apps (full)@ will clear out all cached app info (including shortcuts and favorites) and query the SVMP Server for a full update.
+ 
+Select @Refresh apps (quick)@ and you will be prompted for your login credentials. After you successfully log in, your remote app list will be refreshed and you will see a list of apps to use.
+ 
+_You will notice a green SVMP icon in your notification bar; this indicates that the SVMP Service is running and you are currently connected to the server. While this is running, starting apps will be quicker and you won't need to log in again._
+ 
+Before tapping on an app, pick one and long-press it to see some context options:
+* @Add to favorites@ will make this app show up in the *Favorites* tab. _Note: If this app is already a favorite, you will instead see a @Remove from favorites@ option_.
+* @Create shortcut@ will send a shortcut for this app to your home screen.
+* @Remove shortcuts@ will remove any shortcuts that may exist for this app. _Note: the Android API for interacting with shortcuts is limited, so the client isn't aware what shortcuts exist._
+ 
+Now, try tapping on an app -- this will bring you to the remote video screen and start the app so you can interact with it. Whenever you are done, tap your device's *Back* or *Home* button to exit the app.
+ 
+h2(#preferences). Preferences
+ 
+From any SVMP screen (except the remote video screen), you can tap your device's @Menu@ button to access the @Preferences@ option. Tapping this will bring you to the *Preferences* screen, where you can configure various items. The average user won't need to use this, it is mostly geared towards administrators or developers. As of this writing, the available preferences are:
+* *Sensors*: Control forwarding of sensor data to the SVMP Server; which sensors are enabled and how often they are updated. _Note: sensors generate a large portion of SVMP traffic; if you are experiencing poor performance, try limiting sensor updates or disabling sensors entirely._
+* *Performance*: Control instrumentation values; whether to take measurements, how often to do so, and export or wipe measurements.
+* *Connection*: Control connection options.
+** *Use background connection*: _(default: enabled)_ If this option is enabled, it allows the SVMP Service to stay connected and run in the background; disabling this option will cause the client to terminate SVMP Service every time you exit the remote video activity.
+** *Show certificate dialog*: _(default: disabled)_ If this option is enabled, when the client encounters an untrusted server certificate, it will show a dialog that allows you to choose whether to accept or reject the certificate. *Use with caution!* _Note: if the SVMP app was compiled with a pre-built trust store, this option will have no effect, and the client will only allow connections to server certificates in that trust store._
+** *Show encryption options*: _(default: disabled)_ If this option is enabled, when you view the *Connection Details* screen, the *Encryption* option will be displayed; TLS encryption is selected by default.
+** *Use desktop mode*: _(default: disabled)_ If this option is enabled, using the *Connection List* screen and tapping a connection will no longer take you to that Connection's *App List* screen. Instead, tapping a connection will now bring you to the remote virtual machine's "desktop", its home screen.
