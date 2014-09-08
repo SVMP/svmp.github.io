@@ -47,7 +47,7 @@ $ repo sync -j4
 To check out a stable release version use the '-m' option of repo init to pick the corresponding versioned manifest file like so:
 
 <pre>
-$ repo init -u https://github.com/SVMP/android.git -m svmp-1.3.xml
+$ repo init -u https://github.com/SVMP/android.git -m svmp-1.5.0.xml
 $ repo sync -j4
 </pre>
 
