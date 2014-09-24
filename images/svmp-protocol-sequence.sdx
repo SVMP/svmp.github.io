@@ -2,39 +2,46 @@
 <diagram>
 <source><![CDATA[#![SVMP Protocol Sequence]
 client:Client[a]
+overseer:Overseer[a]
 server:Server[a]
-vm:Virtual Machine[a]
+/vm:Virtual Machine[a]
 
 *1 client
-State: CONNECTED
-*1
-*1 server
-State: UNAUTHENTICATED
+State: STARTED
 *1
 
-client:server.Request (AUTH, AuthRequest)
-server:client.Response (AUTH, AuthResponse)
+client:overseer.POST /login
+overseer:client.200 OK (JSON payload)
 
 *2 client
 State: AUTH
 *2
+
+client:server.Open WebSocket conn. w/ JWT header
+
+*3 client
+State: CONNECTED
+*3
+*1 server
+State: UNAUTHENTICATED
+*1
+
+server:server.Verify client JWT
+
 *2 server
-State: VMREADY_WAIT
+State: AUTHENTICATED
 *2
+
+server:overseer.GET /services/cloud/setupVm/:username
+overseer:vm.new
+overseer:server.200 OK (JSON payload)
+
+*3 server
+State: VMREADY_WAIT
+*3
 
 server:vm.Request (VIDEO_PARAMS, VideoStreamInfo)
 vm:client.Response (VMREADY)
-
-*3 client
-State: READY
-*3
-*3 server
-State: VMREADY_SENT
-*3
-
-client:
-client:server.Request (VIDEO_PARAMS)
-server:client.Response (VIDSTREAMINFO, VideoStreamInfo)
 
 *4 client
 State: RUNNING
@@ -44,15 +51,19 @@ State: PROXYREADY
 *4
 
 client:
-client:vm.Request (TIMEZONE, string)
-
 client:vm.Request (LOCATION, LocationRequest)
+
+client:vm.Request (TIMEZONE, string)
 
 client:vm.Request (SCREENINFO)
 vm:client.Response (SCREENINFO, ScreenInfo)
 
 client:
 client:vm.Request (ROTATION_INFO, RotationInfo)
+
+client:vm.Request (CONFIG, Config)
+
+client:vm.Request (APPS, AppsRequest)
 
 client:vm.Request (WEBRTC, WebRTCMessage)
 vm:client.Response (WEBRTC, WebRTCMessage)]]></source>

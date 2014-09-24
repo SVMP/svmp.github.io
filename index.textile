@@ -47,7 +47,7 @@ Client
 Server
 
 * Node.js 0.10.2+
-* MongoDB 2.2+
+* MongoDB 2.0+
 
 Virtual Device VM
 
@@ -58,6 +58,7 @@ Virtual Device VM
 Public & Private Clouds
 
 * OpenStack Havana (Essex or newer should work, but not tested recently)
+* Amazon EC2
 
 h2(#news). What's New
 

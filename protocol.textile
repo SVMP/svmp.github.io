@@ -5,73 +5,76 @@ title: SVMP Wire Protocol
 
 The SVMP wire protocol is specified and generated using the Protocol Buffers format (also referred to as simply "protobuf"). It is used to facilitate communication among the client, server, and VM. Each message is one of two "supertypes", either a @Request@ or a @Response@. These two message types act as wrappers, containing one of a variety of "subtypes" and extra information. Anything sent from the client is a @Request@, and anything sent to the client is a @Response@. Note that messages do not always imply an expected reply; i.e. a client can send certain @Request@ messages without expecting a @Response@, and vice versa.
 
-Each @Request@ and @Response@ has a @type@ attribute that describes its subtype, and up to one optional attribute associated with that subtype. For instance, when written in JSON, an authentication request looks like this:
-@{"type":"AUTH","authRequest":{"type":1,"username":"alice","password":"wonderland"}}@
+Each @Request@ and @Response@ has a @type@ attribute that describes its subtype, and up to one optional attribute associated with that subtype. For instance, when written in JSON, a rotation information request looks like this:
+@{"type":"ROTATIONINFO","rotationInfo":{"rotation":0}}@
 However, some messages only have a type without additional attributes. For instance, when written in JSON, a screen info request looks like this:
 @{"type":"SCREENINFO"}@
 
 These message types can be viewed by looking at the "protocol definition":https://github.com/SVMP/svmp-protocol-def/blob/master/svmp.proto. Types are self-explanatory and separated based on what mechanism they are used for.
-An example of the protocol sequence is below, where the client authenticates with the server and establishes a connection with the virtual machine:
-<img style="width:44em;" src="images/svmp-protocol-sequence.png" />
+An example of the protocol sequence is below, where the client authenticates with the Overseer through its REST API, opens a WebSocket connection with the server, and establishes a connection with the virtual machine:
+<a href="images/svmp-protocol-sequence.png"><img style="width:44em;" src="images/svmp-protocol-sequence.png" /></a>
 
 Additionally, a sample server log containing protocol message information is below:
-<pre><code>info: New client connection from 192.168.0.223
-debug: Reading Request, type: AUTH
-silly:   Body: {"type":"AUTH","authRequest":{"type":1,"username":"alice","password":"wonderland"}}
-debug: Attempting to authenticate...
-info: User: 'alice' authenticated
-debug: Sending Response, type: AUTH
-silly:   Body: {"type":"AUTH","authResponse":{"type":"AUTH_OK","sessionInfo":{"token":"4f4046bd3b0f2c7a980cc078ded864b45864926c5443751de07054a8e4f74e6933ef9b6c9d6306aa7437bb165cbc73384e0a7a8009aa48012c81186f4f4f84d0","maxLength":21600,"gracePeriod":300}}}
-info: User: 'alice' connected to VM: 192.168.0.222
-debug: Sending Request, type: VIDEO_PARAMS
-silly:   Body: {"type":"VIDEO_PARAMS","videoInfo":{"iceServers":"{\"iceServers\":[{\"url\":\"stun:127.0.0.1:3478\"}]}","pcConstraints":"{\"optional\":[{\"DtlsSrtpKeyAgreement\":true}]}","videoConstraints":"{\"audio\":true,\"video\":{\"mandatory\":{},\"optional\":[]}}"}}
-verbose: State changed to VMREADY_WAIT
-debug: Reading Response, type: VMREADY
-silly:   Body: {"type":"VMREADY"}
-verbose: State changed to VMREADY_SENT
-debug: Reading Request, type: VIDEO_PARAMS
-silly:   Body: {"type":"VIDEO_PARAMS"}
-debug: Sending Response, type: VIDSTREAMINFO
-silly:   Body: {"type":"VIDSTREAMINFO","videoInfo":{"iceServers":"{\"iceServers\":[{\"url\":\"stun:127.0.0.1:3478\"}]}","pcConstraints":"{\"optional\":[{\"DtlsSrtpKeyAgreement\":true}]}","videoConstraints":"{\"audio\":true,\"video\":{\"mandatory\":{},\"optional\":[]}}"}}
-verbose: State changed to PROXYREADY
-debug: Reading Request, type: TIMEZONE
-silly:   Body: {"type":"TIMEZONE","timezoneId":"America/New_York"}
-debug: Reading Request, type: LOCATION
-silly:   Body: {"type":"LOCATION","locationRequest":{"type":1,"providerInfo":{"provider":"gps","requiresNetwork":true,"requiresSatellite":true,"requiresCell":false,"hasMonetaryCost":false,"supportsAltitude":true,"supportsSpeed":true,"supportsBearing":true,"powerRequirement":3,"accuracy":1}}}
-debug: Reading Request, type: LOCATION
-silly:   Body: {"type":"LOCATION","locationRequest":{"type":1,"providerInfo":{"provider":"network","requiresNetwork":true,"requiresSatellite":false,"requiresCell":true,"hasMonetaryCost":false,"supportsAltitude":false,"supportsSpeed":false,"supportsBearing":false,"powerRequirement":1,"accuracy":1}}}
-debug: Reading Request, type: SCREENINFO
-silly:   Body: {"type":"SCREENINFO"}
-debug: Reading Response, type: SCREENINFO
-silly:   Body: {"type":"SCREENINFO","screenInfo":{"x":400,"y":640}}
-debug: Reading Request, type: ROTATION_INFO
-silly:   Body: {"type":"ROTATION_INFO","rotationInfo":{"rotation":0}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"type\":\"offer\",\"sdp\":\"v=0\\r\\no=- 9166106684391591206 2 IN IP4 127.0.0.1\\r\\ns=-\\r\\nt=0 0\\r\\na=group:BUNDLE audio video\\r\\na=msid-semantic: WMS\\r\\nm=audio 1 RTP\\/SAVPF 103 111 9 102 0 8 106 105 13 127 126\\r\\nc=IN IP4 0.0.0.0\\r\\na=rtcp:1 IN IP4 0.0.0.0\\r\\na=ice-ufrag:3MQTkET9lwJgzQQD\\r\\na=ice-pwd:CipO95mrBv16syK7CbvN8ht1\\r\\na=ice-options:google-ice\\r\\na=fingerprint:sha-1 D7:D6:FD:53:95:B0:C2:75:7D:C3:51:36:FE:CF:39:C5:A4:F7:91:7E\\r\\na=setup:actpass\\r\\na=mid:audio\\r\\na=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=recvonly\\r\\na=rtcp-mux\\r\\na=rtpmap:103 ISAC\\/16000\\r\\na=rtpmap:111 opus\\/48000\\/2\\r\\na=fmtp:111 minptime=10\\r\\na=rtpmap:9 G722\\/16000\\r\\na=rtpmap:102 ILBC\\/8000\\r\\na=rtpmap:0 PCMU\\/8000\\r\\na=rtpmap:8 PCMA\\/8000\\r\\na=rtpmap:106 CN\\/32000\\r\\na=rtpmap:105 CN\\/16000\\r\\na=rtpmap:13 CN\\/8000\\r\\na=rtpmap:127 red\\/8000\\r\\na=rtpmap:126 telephone-event\\/8000\\r\\na=maxptime:60\\r\\nm=video 1 RTP\\/SAVPF 100 116 117\\r\\nc=IN IP4 0.0.0.0\\r\\na=rtcp:1 IN IP4 0.0.0.0\\r\\na=ice-ufrag:3MQTkET9lwJgzQQD\\r\\na=ice-pwd:CipO95mrBv16syK7CbvN8ht1\\r\\na=ice-options:google-ice\\r\\na=fingerprint:sha-1 D7:D6:FD:53:95:B0:C2:75:7D:C3:51:36:FE:CF:39:C5:A4:F7:91:7E\\r\\na=setup:actpass\\r\\na=mid:video\\r\\na=extmap:2 urn:ietf:params:rtp-hdrext:toffset\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=recvonly\\r\\na=rtcp-mux\\r\\na=rtpmap:100 VP8\\/90000\\r\\na=rtcp-fb:100 ccm fir\\r\\na=rtcp-fb:100 nack\\r\\na=rtcp-fb:100 nack pli\\r\\na=rtcp-fb:100 goog-remb\\r\\na=rtpmap:116 red\\/90000\\r\\na=rtpmap:117 ulpfec\\/90000\\r\\n\"}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2448344806 1 udp 2122194687 192.168.0.223 52262 typ host generation 0\\r\\n\",\"label\":0}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2448344806 2 udp 2122194687 192.168.0.223 52262 typ host generation 0\\r\\n\",\"label\":0}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2448344806 1 udp 2122194687 192.168.0.223 52262 typ host generation 0\\r\\n\",\"label\":1}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2448344806 2 udp 2122194687 192.168.0.223 52262 typ host generation 0\\r\\n\",\"label\":1}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3748477462 1 tcp 1518214911 192.168.0.223 54566 typ host generation 0\\r\\n\",\"label\":0}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3748477462 2 tcp 1518214911 192.168.0.223 54566 typ host generation 0\\r\\n\",\"label\":0}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3748477462 1 tcp 1518214911 192.168.0.223 54566 typ host generation 0\\r\\n\",\"label\":1}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3748477462 2 tcp 1518214911 192.168.0.223 54566 typ host generation 0\\r\\n\",\"label\":1}"}}
-debug: Reading Response, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"type\":\"answer\",\"sdp\":\"v=0\\r\\no=- 7446317567240323384 2 IN IP4 127.0.0.1\\r\\ns=-\\r\\nt=0 0\\r\\na=group:BUNDLE video\\r\\na=msid-semantic: WMS ARDAMS\\r\\nm=audio 0 RTP\\/SAVPF 111 103 9 102 0 8 106 105 13 127 126\\r\\nc=IN IP4 0.0.0.0\\r\\na=rtcp:1 IN IP4 0.0.0.0\\r\\na=mid:audio\\r\\na=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=sendonly\\r\\na=rtcp-mux\\r\\na=rtpmap:111 opus\\/48000\\/2\\r\\na=fmtp:111 minptime=10\\r\\na=rtpmap:103 ISAC\\/16000\\r\\na=rtpmap:9 G722\\/16000\\r\\na=rtpmap:102 ILBC\\/8000\\r\\na=rtpmap:0 PCMU\\/8000\\r\\na=rtpmap:8 PCMA\\/8000\\r\\na=rtpmap:106 CN\\/32000\\r\\na=rtpmap:105 CN\\/16000\\r\\na=rtpmap:13 CN\\/8000\\r\\na=rtpmap:127 red\\/8000\\r\\na=rtpmap:126 telephone-event\\/8000\\r\\na=maxptime:60\\r\\nm=video 1 RTP\\/SAVPF 100 116 117\\r\\nc=IN IP4 0.0.0.0\\r\\na=rtcp:1 IN IP4 0.0.0.0\\r\\na=ice-ufrag:AxeQRURmfc3Gt9AH\\r\\na=ice-pwd:Iom+MV2tmVDZpghvDcfCoKap\\r\\na=fingerprint:sha-1 60:3D:09:DC:F7:56:22:9F:8C:62:5E:29:FF:F2:DF:C0:C9:92:CB:4F\\r\\na=setup:active\\r\\na=mid:video\\r\\na=extmap:2 urn:ietf:params:rtp-hdrext:toffset\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=sendonly\\r\\na=rtcp-mux\\r\\na=rtpmap:100 VP8\\/90000\\r\\na=rtcp-fb:100 ccm fir\\r\\na=rtcp-fb:100 nack\\r\\na=rtcp-fb:100 nack pli\\r\\na=rtcp-fb:100 goog-remb\\r\\na=rtpmap:116 red\\/90000\\r\\na=rtpmap:117 ulpfec\\/90000\\r\\na=ssrc:2759530571 cname:t0EZIv0tpS1KLLAI\\r\\na=ssrc:2759530571 msid:ARDAMS ARDAMSv0\\r\\na=ssrc:2759530571 mslabel:ARDAMS\\r\\na=ssrc:2759530571 label:ARDAMSv0\\r\\n\"}"}}
-debug: Reading Response, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:693281155 1 udp 2122194687 192.168.0.222 36586 typ host generation 0\\r\\n\",\"label\":1}"}}
-debug: Reading Response, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:1741774195 1 tcp 1518214911 192.168.0.222 52506 typ host generation 0\\r\\n\",\"label\":1}"}}
-debug: Reading Request, type: WEBRTC
-silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"type\":\"bye\"}"}}
+<pre><code>2014-09-24T19:58:16.047Z - info: New connection from 192.168.1.212:51081
+2014-09-24T19:58:16.049Z - debug: Attempting to authenticate client...
+2014-09-24T19:58:16.059Z - info: User 'joe' (192.168.1.212:51081) authenticated
+2014-09-24T19:58:16.060Z - verbose: Calling overseer: services/vm-session for user 'joe'
+2014-09-24T19:58:16.096Z - verbose: Calling overseer: services/cloud/setupVm/joe
+2014-09-24T19:58:16.110Z - verbose: Connecting to VM 192.168.1.211...
+2014-09-24T19:58:16.110Z - info: User 'joe' (192.168.1.212:51081) connected to VM at 192.168.1.211:8001
+2014-09-24T19:58:16.111Z - debug: Sending Request, type: VIDEO_PARAMS
+2014-09-24T19:58:16.111Z - silly:   Body: {"type":"VIDEO_PARAMS","videoInfo":{"iceServers":"[{\"url\":\"stun:127.0.0.1:3478\"}]","pcConstraints":"{\"optional\":[{\"DtlsSrtpKeyAgreement\":true}]}","videoConstraints":"{\"audio\":true,\"video\":{\"mandatory\":{},\"optional\":[]}}"}}
+2014-09-24T19:58:16.116Z - debug: User 'joe' session state changed to VMREADY_WAIT
+2014-09-24T19:58:16.117Z - debug: Reading Response, type: VMREADY
+2014-09-24T19:58:16.117Z - silly:   Body: {"type":"VMREADY"}
+2014-09-24T19:58:16.117Z - verbose: State changed to PROXYREADY
+2014-09-24T19:58:16.117Z - verbose: vmSession for 'joe' expires in 21499.883 seconds
+2014-09-24T19:58:16.263Z - debug: Reading Request, type: LOCATION
+2014-09-24T19:58:16.265Z - silly:   Body: {"type":"LOCATION","locationRequest":{"type":1,"providerInfo":{"provider":"gps","requiresNetwork":true,"requiresSatellite":true,"requiresCell":false,"hasMonetaryCost":false,"supportsAltitude":true,"supportsSpeed":true,"supportsBearing":true,"powerRequirement":3,"accuracy":1}}}
+2014-09-24T19:58:16.303Z - debug: Reading Request, type: LOCATION
+2014-09-24T19:58:16.304Z - silly:   Body: {"type":"LOCATION","locationRequest":{"type":1,"providerInfo":{"provider":"network","requiresNetwork":true,"requiresSatellite":false,"requiresCell":true,"hasMonetaryCost":false,"supportsAltitude":false,"supportsSpeed":false,"supportsBearing":false,"powerRequirement":1,"accuracy":1}}}
+2014-09-24T19:58:16.812Z - debug: Reading Request, type: TIMEZONE
+2014-09-24T19:58:16.813Z - silly:   Body: {"type":"TIMEZONE","timezoneId":"America/New_York"}
+2014-09-24T19:58:16.816Z - debug: Reading Request, type: SCREENINFO
+2014-09-24T19:58:16.817Z - silly:   Body: {"type":"SCREENINFO"}
+2014-09-24T19:58:16.818Z - debug: Reading Request, type: ROTATION_INFO
+2014-09-24T19:58:16.819Z - silly:   Body: {"type":"ROTATION_INFO","rotationInfo":{"rotation":0}}
+2014-09-24T19:58:16.824Z - debug: Reading Request, type: CONFIG
+2014-09-24T19:58:16.826Z - silly:   Body: {"type":"CONFIG","config":{"hardKeyboard":false}}
+2014-09-24T19:58:16.828Z - debug: Reading Request, type: APPS
+2014-09-24T19:58:16.829Z - silly:   Body: {"type":"APPS","apps":{"type":2}}
+2014-09-24T19:58:17.506Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.507Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"type\":\"offer\",\"sdp\":\"v=0\\r\\no=- 8541294415246783206 2 IN IP4 127.0.0.1\\r\\ns=-\\r\\nt=0 0\\r\\na=group:BUNDLE audio video\\r\\na=msid-semantic: WMS\\r\\nm=audio 46130 RTP\\/SAVPF 103 111 9 102 0 8 106 105 13 127 126\\r\\nc=IN IP4 192.168.1.212\\r\\na=rtcp:46130 IN IP4 192.168.1.212\\r\\na=candidate:2723732429 1 udp 2122194687 192.168.1.212 46130 typ host generation 0\\r\\na=candidate:2723732429 2 udp 2122194687 192.168.1.212 46130 typ host generation 0\\r\\na=ice-ufrag:QSYXPTZ\\/Vz\\/vF4Aq\\r\\na=ice-pwd:BGmZ9Sv7PUcZOxLzHVnEveZq\\r\\na=ice-options:google-ice\\r\\na=fingerprint:sha-1 FF:41:E8:1E:F8:64:B3:7A:C2:3C:2A:D7:6A:79:99:B9:1C:3E:F1:A5\\r\\na=setup:actpass\\r\\na=mid:audio\\r\\na=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=recvonly\\r\\na=rtcp-mux\\r\\na=rtpmap:103 ISAC\\/16000\\r\\na=rtpmap:111 opus\\/48000\\/2\\r\\na=fmtp:111 minptime=10\\r\\na=rtpmap:9 G722\\/16000\\r\\na=rtpmap:102 ILBC\\/8000\\r\\na=rtpmap:0 PCMU\\/8000\\r\\na=rtpmap:8 PCMA\\/8000\\r\\na=rtpmap:106 CN\\/32000\\r\\na=rtpmap:105 CN\\/16000\\r\\na=rtpmap:13 CN\\/8000\\r\\na=rtpmap:127 red\\/8000\\r\\na=rtpmap:126 telephone-event\\/8000\\r\\na=maxptime:60\\r\\nm=video 1 RTP\\/SAVPF 100 116 117\\r\\nc=IN IP4 0.0.0.0\\r\\na=rtcp:1 IN IP4 0.0.0.0\\r\\na=ice-ufrag:QSYXPTZ\\/Vz\\/vF4Aq\\r\\na=ice-pwd:BGmZ9Sv7PUcZOxLzHVnEveZq\\r\\na=ice-options:google-ice\\r\\na=fingerprint:sha-1 FF:41:E8:1E:F8:64:B3:7A:C2:3C:2A:D7:6A:79:99:B9:1C:3E:F1:A5\\r\\na=setup:actpass\\r\\na=mid:video\\r\\na=extmap:2 urn:ietf:params:rtp-hdrext:toffset\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=recvonly\\r\\na=rtcp-mux\\r\\na=rtpmap:100 VP8\\/90000\\r\\na=rtcp-fb:100 ccm fir\\r\\na=rtcp-fb:100 nack\\r\\na=rtcp-fb:100 nack pli\\r\\na=rtcp-fb:100 goog-remb\\r\\na=rtpmap:116 red\\/90000\\r\\na=rtpmap:117 ulpfec\\/90000\\r\\n\"}"}}
+2014-09-24T19:58:17.510Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.510Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2723732429 1 udp 2122194687 192.168.1.212 46130 typ host generation 0\\r\\n\",\"label\":0}"}}
+2014-09-24T19:58:17.511Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.511Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2723732429 2 udp 2122194687 192.168.1.212 46130 typ host generation 0\\r\\n\",\"label\":0}"}}
+2014-09-24T19:58:17.512Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.513Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2723732429 1 udp 2122194687 192.168.1.212 46130 typ host generation 0\\r\\n\",\"label\":1}"}}
+2014-09-24T19:58:17.514Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.514Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2723732429 2 udp 2122194687 192.168.1.212 46130 typ host generation 0\\r\\n\",\"label\":1}"}}
+2014-09-24T19:58:17.516Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.523Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3973785405 1 tcp 1518214911 192.168.1.212 39913 typ host generation 0\\r\\n\",\"label\":0}"}}
+2014-09-24T19:58:17.524Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.526Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3973785405 2 tcp 1518214911 192.168.1.212 39913 typ host generation 0\\r\\n\",\"label\":0}"}}
+2014-09-24T19:58:17.527Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.528Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3973785405 1 tcp 1518214911 192.168.1.212 39913 typ host generation 0\\r\\n\",\"label\":1}"}}
+2014-09-24T19:58:17.529Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:58:17.530Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:3973785405 2 tcp 1518214911 192.168.1.212 39913 typ host generation 0\\r\\n\",\"label\":1}"}}
+2014-09-24T19:58:23.612Z - debug: Reading Response, type: SCREENINFO
+2014-09-24T19:58:23.613Z - silly:   Body: {"type":"SCREENINFO","screenInfo":{"x":360,"y":480}}
+2014-09-24T19:58:23.677Z - debug: Reading Response, type: WEBRTC
+2014-09-24T19:58:23.677Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"type\":\"answer\",\"sdp\":\"v=0\\r\\no=- 6321281312243545657 2 IN IP4 127.0.0.1\\r\\ns=-\\r\\nt=0 0\\r\\na=group:BUNDLE audio video\\r\\na=msid-semantic: WMS ARDAMS\\r\\nm=audio 1 RTP\\/SAVPF 111 103 9 102 0 8 127 126\\r\\nc=IN IP4 0.0.0.0\\r\\na=rtcp:1 IN IP4 0.0.0.0\\r\\na=ice-ufrag:VCjuTd\\/Ne1KmH8rS\\r\\na=ice-pwd:h1fgwRd4v40JNwM3GDOlEcq3\\r\\na=fingerprint:sha-1 0D:11:36:52:08:AE:30:C8:C8:B1:68:5D:94:63:AF:AA:0F:92:2B:B8\\r\\na=setup:active\\r\\na=mid:audio\\r\\na=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=sendonly\\r\\na=rtcp-mux\\r\\na=rtpmap:111 opus\\/48000\\/2\\r\\na=fmtp:111 minptime=10\\r\\na=rtpmap:103 ISAC\\/16000\\r\\na=rtpmap:9 G722\\/16000\\r\\na=rtpmap:102 ILBC\\/8000\\r\\na=rtpmap:0 PCMU\\/8000\\r\\na=rtpmap:8 PCMA\\/8000\\r\\na=rtpmap:127 red\\/8000\\r\\na=rtpmap:126 telephone-event\\/8000\\r\\na=maxptime:60\\r\\na=ssrc:586749727 cname:NrdDwsnXX+iGEljM\\r\\na=ssrc:586749727 msid:ARDAMS ARDAMSa0\\r\\na=ssrc:586749727 mslabel:ARDAMS\\r\\na=ssrc:586749727 label:ARDAMSa0\\r\\nm=video 1 RTP\\/SAVPF 100 116 117\\r\\nc=IN IP4 0.0.0.0\\r\\na=rtcp:1 IN IP4 0.0.0.0\\r\\na=ice-ufrag:VCjuTd\\/Ne1KmH8rS\\r\\na=ice-pwd:h1fgwRd4v40JNwM3GDOlEcq3\\r\\na=fingerprint:sha-1 0D:11:36:52:08:AE:30:C8:C8:B1:68:5D:94:63:AF:AA:0F:92:2B:B8\\r\\na=setup:active\\r\\na=mid:video\\r\\na=extmap:2 urn:ietf:params:rtp-hdrext:toffset\\r\\na=extmap:3 http:\\/\\/www.webrtc.org\\/experiments\\/rtp-hdrext\\/abs-send-time\\r\\na=sendonly\\r\\na=rtcp-mux\\r\\na=rtpmap:100 VP8\\/90000\\r\\na=rtcp-fb:100 ccm fir\\r\\na=rtcp-fb:100 nack\\r\\na=rtcp-fb:100 nack pli\\r\\na=rtcp-fb:100 goog-remb\\r\\na=rtpmap:116 red\\/90000\\r\\na=rtpmap:117 ulpfec\\/90000\\r\\na=ssrc:3493861679 cname:NrdDwsnXX+iGEljM\\r\\na=ssrc:3493861679 msid:ARDAMS ARDAMSv0\\r\\na=ssrc:3493861679 mslabel:ARDAMS\\r\\na=ssrc:3493861679 label:ARDAMSv0\\r\\n\"}"}}
+2014-09-24T19:58:23.694Z - debug: Reading Response, type: WEBRTC
+2014-09-24T19:58:23.694Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2968351779 1 udp 2122194687 192.168.1.211 59552 typ host generation 0\\r\\n\",\"label\":0}"}}
+2014-09-24T19:58:23.695Z - debug: Reading Response, type: WEBRTC
+2014-09-24T19:58:23.695Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:2968351779 1 udp 2122194687 192.168.1.211 59552 typ host generation 0\\r\\n\",\"label\":1}"}}
+2014-09-24T19:58:23.794Z - debug: Reading Response, type: WEBRTC
+2014-09-24T19:58:23.794Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"audio\",\"type\":\"candidate\",\"candidate\":\"a=candidate:4268656851 1 tcp 1518214911 192.168.1.211 53401 typ host generation 0\\r\\n\",\"label\":0}"}}
+2014-09-24T19:58:23.795Z - debug: Reading Response, type: WEBRTC
+2014-09-24T19:58:23.795Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"id\":\"video\",\"type\":\"candidate\",\"candidate\":\"a=candidate:4268656851 1 tcp 1518214911 192.168.1.211 53401 typ host generation 0\\r\\n\",\"label\":1}"}}
+2014-09-24T19:59:00.726Z - debug: Reading Request, type: WEBRTC
+2014-09-24T19:59:00.726Z - silly:   Body: {"type":"WEBRTC","webrtcMsg":{"json":"{\"type\":\"bye\"}"}}
 </code></pre>
 
 For information on Protocol Buffers, see the "Developer Guide":https://developers.google.com/protocol-buffers/docs/overview.

@@ -9,11 +9,16 @@ SVMP relies heavily on cloud APIs to manage the life cycle of the virtual smartp
 
 The main components are:
 * The client application on users' phones or tablets
+* The SVMP Overseer that handles authentication, database managment, and virtual machine deployment
 * The SVMP Server the clients connect to
 * The virtual device "gold image" and per-user set of persistent data volumes
 * The cloud controller that serves the API of the underlying cloud
 
-<img style="width:42em;" src="images/cloud-app-arch.png" />
+<img style="width:44em;" src="images/cloud-app-arch-1.png" />
+
+Additionally, an optional reverse proxy/load balancer can be used in the implementation.
+
+|=. <img style="width:30em;" src="images/cloud-app-arch-2.png" />|
 
 h3. Client Application
 
@@ -25,13 +30,19 @@ All of these inputs are packaged into "SVMP protocol messages":protocol.html and
 
 The client also creates a WebRTC peer connection with the virtual device. Video and audio output from the virtual device flows back across this link and is played back to the user, completing the loop.
 
+h3. SVMP Overseer
+
+The SVMP Overseer is the first internet-facing components of the system. This is what goes on your DMZ.
+
+It is responsible for receiving login requests from users, performing authentication against a database or external identity service, and creating and managing virtual machines on the cloud. It operates a RESTful API that clients and SVMP Servers can access. It also includes the Web Console for managing users and the HTML5 client.
+
 h3. SVMP Server
 
-The SVMP server is the primary internet-facing component of the system. This is what goes on your DMZ.
+The SVMP Server is the second internet-facing component of the system. This also goes on your DMZ.
 
-It is responsible for receiving login requests from users, performing authentication against a database or external identity service, creating and managing virtual machines on the cloud, and routing input messages from client connections to the SVMP daemons running inside the virtual devices.
+It is responsible for receiving connection request from users that have already authenticated with the Overseer, initiating virtual machine deployments through the Overseer, and routing input messages from client connections to the SVMP daemons running inside the virtual devices.
 
-The server is designed for modularity and scalability so multiple instances can be run behind a load balancer to service large numbers of simultaneous users.
+The Server is designed for modularity and scalability so multiple instances can be run behind a load balancer to service large numbers of simultaneous users.
 
 h3. Virtual Device Image
 

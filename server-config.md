@@ -233,7 +233,7 @@ The SVMP server can output detailed logs of user sessions and connection attempt
 
 2. `log_level`: The verbosity of log output. For production deployments, 'info' is the recommended output level. The higher levels ("verbose", "debug", and "silly") may be useful to debug configuration and runtime errors.
 
-   **Warning**: The highest levels ("silly" and "debug") will output potentially sensitive data to the log file including passwords and session tokens. Use these levels only if you know what you are doing, and **never** in production.
+   **Warning**: The highest levels ("silly" and "debug") will output potentially sensitive data to the log file including session tokens. Use these levels only if you know what you are doing, and **never** in production.
 
 ## SSL / TLS
 
@@ -261,9 +261,7 @@ The SVMP server can use one of several methods to authenticate users.
 
 ### Password
 
-Unless one of the other methods is specifically enabled, the server will default to password authentication. Passwords are stored in the server's MongoDB database.
-
-**Warning**: In its current form, password authentication is meant for testing and development use only. The database stores password in the clear without either hashing or encryption. This is insecure for production use.
+Unless one of the other methods is specifically enabled, the server will default to password authentication. Passwords are stored in the server's MongoDB database. The user model requires that passwords be at least 8 characters long.
 
 ### PAM
 
