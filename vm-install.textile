@@ -48,7 +48,7 @@ h3. Security Groups
 Openstack security groups can be used to effectively create host-based firewalls for the SVMP instances. If you use this feature, these are the ports that must be allowed access.
 
 SVMP Server
-* Inbound TCP 8001 from the server
+* Inbound TCP 8001 from the svmp-server
 
 WebRTC
 * Outbound TCP and UDP 3478 to your STUN/TURN server

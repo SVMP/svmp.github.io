@@ -13,7 +13,7 @@ First check out the svmp-protocol-def project
 git clone https://github.com/SVMP/svmp-protocol-def
 </pre>
 
-You will also need the "Protocol Buffers v2.5.0":https://code.google.com/p/protobuf/ tools installed, specifically the protoc compiler.
+You will also need the "Protocol Buffers v2.5.0":https://code.google.com/p/protobuf/ tools installed, specifically the protoc compiler. Version 2.6 has not yet been tested for compatibility.
 
 h2(#server). SVMP Server
 

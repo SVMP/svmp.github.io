@@ -26,10 +26,12 @@ Download the submodules:
 $ git submodule update --init
 </pre>
 
-h2(#server). SVMP Server
+h2(#server). SVMP Server & Overseer
 
 <pre>
+$ git clone https://github.com/SVMP/svmp-overseer
 $ git clone https://github.com/SVMP/svmp-server
+$ git clone https://github.com/SVMP/svmp-server-cli
 </pre>
 
 h2(#vm). SVMP AOSP VM
@@ -41,14 +43,14 @@ Checking out the master development branch:
 <pre>
 $ mkdir svmp ; cd svmp
 $ repo init -u https://github.com/SVMP/android.git
-$ repo sync -j4
+$ repo sync
 </pre>
 
 To check out a stable release version use the '-m' option of repo init to pick the corresponding versioned manifest file like so:
 
 <pre>
-$ repo init -u https://github.com/SVMP/android.git -m svmp-1.5.0.xml
-$ repo sync -j4
+$ repo init -u https://github.com/SVMP/android.git -m svmp-2.0.0.xml
+$ repo sync
 </pre>
 
 This command can be used on an already checked out copy to switch from one tag or branch to another. If switching _to_ the master branch, make sure to still specify a branch `-b master -m default.xml` to ensure it works correcly. If you had previously built the code before switching branches, we advise running a `make clean` before building again.

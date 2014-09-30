@@ -30,7 +30,7 @@ Build the client using ant.
 
 Additional ant commands are documented "here":https://developer.android.com/tools/building/building-cmdline.html#AntReference.
 
-Gradle build files are also included in addition to Ant. Gradle 1.10, 1.11, or 1.12 is required. To build the application using gradle:
+Gradle build files are also included, however Ant is recommended. Gradle 1.10, 1.11, or 1.12 is required. To build the application using gradle:
 
 <pre>
 cd svmp-android-client
