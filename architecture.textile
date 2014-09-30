@@ -112,10 +112,14 @@ The code for handling intents and forwarding notifications on the smartphone VM 
 
 h3. Video
 
+At the lowest level, the SVMP VM image displays video output to a Virtual FrameBuffer (VFB) device from the Linux kernel as opposed to a real video device. When frames are writen to the framebuffer (the VFB in this case), the Android surfaceflinger library generates a VSYNC event. When a VSYNC event occurs, frames are copied from the VFB after the screen has been fully updated.  Each frame is fed into the WebRTC subsystem which is responsible for video encoding and streaming. 
 
+WebRTC is used to stream video for several reasons. First, complex network topology issues are handled very well. The inclusion of STUN, TURN and ICE protocols provides excellent support for traversing NAT and firewalls. Second, support for several resilient video codecs, such as VP8, provide adaptation to less than ideal network conditions common on mobile devices.  SVMP includes a custom WebRTC video input driver that reads from the VFB for input.
+
+On the receiving end, things are much simpler. Since the source stream from the VM appears as a standard video streaming source, nothing special is required outside of receiving a standard WebRTC video stream. This architecture provides great flexibility. Currently video streaming is functional on Android, iOS and HTML5 clients.
 
 h3. Versioning
 
-SVMP version 1.0 and earlier are based on Android 4.0.4 "Ice Cream Sandwich". Versions 1.1 through 1.4 are based on Android 4.2.2 "Jelly Bean".
+SVMP version 1.0 and earlier are based on Android 4.0.4 "Ice Cream Sandwich". Versions 1.1 through 1.4 are based on Android 4.2.2 "Jelly Bean". Version 2.0 is based on the 4.4 or "KitKat" version.
 
-Going forward, the SVMP major version number will increment when we upgrade from one Android "letter" series to the next. For example, SVMP 2.x will be based on Android 4.4.x "KitKat", and SVMP 3.x will correspond with the "L" version of Android.
+Going forward, the SVMP major version number will increment when we upgrade from one Android "letter" series to the next. For example, and SVMP 3.x will correspond with the "L" version of Android.
