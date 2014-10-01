@@ -3,6 +3,10 @@ layout: default
 title: Building the App for iOS
 ---
 
+h2(#notice). Notice
+
+The iOS client has not been updated since SVMP 1.4. It will not work with newer versions of other SVMP components.
+
 h2(#prereq). Prerequisites
 
 * "Xcode 5.1.x":https://developer.apple.com/xcode/downloads/
